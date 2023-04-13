@@ -1,4 +1,5 @@
 import '@/styles/globals.scss'
+import '@/styles/reset.scss'
 import Layout from '@/components/Layout'
 import { Provider } from 'react-redux';
 import store from '../store/index'

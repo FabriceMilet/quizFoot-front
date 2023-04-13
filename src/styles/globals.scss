@@ -1,4 +1,11 @@
+@use "../styles/vars";
+
+@font-face {
+    font-family: 'goodtime';
+    src: url('../../public/fonts/good_timing.woff2')
+}
+
 body {
-    background-color: red;
-    
+    background-color: vars.$white; 
+    font-family: 'goodtime';
 }
