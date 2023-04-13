@@ -1,7 +1,7 @@
 @use "../styles/vars";
 
 .container {
-    background-color:vars.$lightblue;
+    background-color: vars.$lightblue;
     width: 100vw;
     height: 20vh;
     position: fixed;
@@ -11,26 +11,69 @@
     align-items: center;
     justify-content: space-between;
 
-    &_logo button:hover{
-        cursor: pointer;
+    &Logo {
+        width: 7rem;
+
+        &:hover {
+            cursor: pointer;
+        }
     }
-    &_title {
+
+    &Title {
         text-transform: uppercase;
         font-size: 3.2rem;
         color: vars.$white;
+        text-shadow: 5px 1px 2px vars.$green;
     }
-    &_navigation button{
-        width: 8rem;
-        border: none;
+
+    &Navigation {
         border-bottom: 4px solid vars.$green;
-        background-color: transparent;
-        color: vars.$white;
-        padding: 0.3rem 0.6rem 0.3rem 0.6rem;
+        border-right: 4px solid vars.$green;
         border-radius: 10px;
-        margin-left: 1rem;
-        font-size: 1.1rem;
-        &:hover{
-            cursor: pointer;
+        width: 10rem;
+        padding-bottom: 0.8rem;
+
+        &__logos {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            // justify-content: space-around;
+        }
+
+        &__link {
+            transition: all .2s ease;
+            position: relative;
+
+            &::before {
+                content: "";
+                position: absolute;
+                top: 3px;
+                left: 0;
+                display: block;
+                border-radius: 28px;
+                background: rgba(vars.$green, .6);
+                width: 26px;
+                height: 26px;
+                transition: all .3s ease;
+            }
+            &:hover::before {
+                width: 85%;
+                height: 100%;
+                background: rgba(vars.$green, 1);
+              }
+        }
+
+        & button {
+            border: none;
+            background-color: transparent;
+            color: vars.$white;
+            padding-top: 0.4rem;
+            font-size: 1.1rem;
+            position: relative;
+           
+            &:hover {
+                cursor: pointer;
+            }
         }
     }
 }
