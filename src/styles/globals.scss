@@ -4,6 +4,10 @@
     font-family: 'goodtime';
     src: url('../../public/fonts/good_timing.woff2')
 }
+@font-face {
+    font-family: 'noto';
+    src: url('../../public/fonts/NotoSerifJP-Regular.woff')
+}
 
 body {
     background-color: vars.$white; 

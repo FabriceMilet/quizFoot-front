@@ -3,7 +3,7 @@
 .container {
     background-color: vars.$lightblue;
     width: 100vw;
-    height: 20vh;
+    height: 9rem;
     position: fixed;
     padding: 0 3rem 0 3rem;
     top: 0;
@@ -12,8 +12,7 @@
     justify-content: space-between;
 
     &Logo {
-        width: 7rem;
-
+        width: 8rem;
         &:hover {
             cursor: pointer;
         }
