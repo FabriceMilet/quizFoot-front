@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { getQuizzes } from '@/store/slices/quiz.slice';
 import { useSelector, useDispatch } from "react-redux";
 import axios from 'axios';
+import Link from 'next/link';
 
 export default function Home({ quizzes }) {
   // const dispatch = useDispatch();
@@ -32,7 +33,10 @@ export default function Home({ quizzes }) {
           <div className={styles.containerCard}>
             <h3>Sélections nationales</h3>
             <div>
-              <div className={styles.containerCard__choice}>Tu peux choisir ton match <button>Ici</button> </div>
+              <div className={styles.containerCard__choice}>Tu peux choisir ton match 
+              <Link href="/search/selections-nationales">
+              <button>Ici</button> 
+              </Link></div>
               <span>ou</span>
               <div className={styles.containerCard__choice}>Lancer un quiz au hasard<button>Là</button></div>
               
