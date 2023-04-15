@@ -1,10 +1,12 @@
 @use 'sass:color';
 // Palette de base
-$blue:#06668C;
-$lightblue:#427AA1;
-$white:#EBF2FA;
-$green:#679436;
-$lightgreen:#A4BD01;
+$blue:#E18335;
+$lightblue:#E4CC37;
+$white:#8FC93A;
+$green:#0072BB;
+$lightgreen:#1E91D6;
 
-$white-darker: color.scale($white, $lightness: -8%);
+$white-darker: color.scale($white, $lightness: 32%);
+$blue-light: color.scale($blue, $lightness: 12%);
 $green-darker: color.scale($green, $lightness: -25%);
+$lightblue-light: color.scale($lightblue, $lightness: 80%)

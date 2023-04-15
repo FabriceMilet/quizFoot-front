@@ -32,7 +32,7 @@ export default function Home({ quizzes }) {
         <div className={styles.containerCards}>
           <div className={styles.containerCard}>
             <h3>Sélections nationales</h3>
-            <div>
+            <div className={styles.containerCard__bottom}>
               <div className={styles.containerCard__choice}>Tu peux choisir ton match 
               <Link href="/search/selections-nationales">
               <button>Ici</button> 
@@ -44,7 +44,7 @@ export default function Home({ quizzes }) {
             </div>
             <div className={styles.containerCard}>
             <h3>Ligue 1</h3>
-            <div>
+            <div className={styles.containerCard__bottom}>
               <div className={styles.containerCard__choice}>Tu peux choisir ton match <button>Ici</button> </div>
               <span>ou</span>
               <div className={styles.containerCard__choice}>Lancer un quiz au hasard <button>Là</button></div>
@@ -53,7 +53,7 @@ export default function Home({ quizzes }) {
             </div>
             <div className={styles.containerCard}>
             <h3>Ligue des champions</h3>
-            <div>
+            <div className={styles.containerCard__bottom}>
               <div className={styles.containerCard__choice}>Tu peux choisir ton match <button>Ici</button> </div>
               <span>ou</span>
               <div className={styles.containerCard__choice}>Lancer un quiz au hasard <button>Là</button></div>
@@ -62,7 +62,7 @@ export default function Home({ quizzes }) {
             </div>
             <div className={styles.containerCard}>
             <h3>Championnats étrangers</h3>
-            <div>
+            <div className={styles.containerCard__bottom}>
               <div className={styles.containerCard__choice}>Tu peux choisir ton match <button>Ici</button> </div>
               <span>ou</span>
               <div className={styles.containerCard__choice}>Lancer un quiz au hasard<button>Là</button></div>

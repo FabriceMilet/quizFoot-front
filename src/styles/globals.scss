@@ -10,6 +10,13 @@
 }
 
 body {
-    background-color: vars.$white; 
+    // background-color: vars.$white; 
+    background: linear-gradient(
+    225deg,
+    vars.$white,
+    vars.$lightblue-light,
+    vars.$lightgreen
+  );
+  background-size: 400% 400%;
     font-family: 'goodtime';
 }
