@@ -1,7 +1,7 @@
 @use "../styles/vars";
 
 .container {
-    background-color: vars.$lightgreen;
+    background-color: vars.$blue;
     width: 100vw;
     height: 9rem;
     position: fixed;
@@ -10,9 +10,10 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    font-family: 'goodtime';
 
     &Logo {
-        width: 8rem;
+        width: 7rem;
         &:hover {
             cursor: pointer;
         }
@@ -21,8 +22,8 @@
     &Title {
         text-transform: uppercase;
         font-size: 3.2rem;
-        color: vars.$white;
-        text-shadow: 5px 1px 2px vars.$green;
+        color: vars.$white-darker;
+        text-shadow: 2px 1px 2px vars.$green;
     }
 
     &Navigation {
@@ -50,7 +51,7 @@
                 left: 0;
                 display: block;
                 border-radius: 28px;
-                background: rgba(vars.$green, .6);
+                background: rgba(vars.$green, .3);
                 width: 26px;
                 height: 26px;
                 transition: all .3s ease;
@@ -58,14 +59,14 @@
             &:hover::before {
                 width: 85%;
                 height: 100%;
-                background: rgba(vars.$green, 1);
+                background: rgba(vars.$green, .5);
               }
         }
 
         & button {
             border: none;
             background-color: transparent;
-            color: vars.$white;
+            color: vars.$white-darker;
             padding-top: 0.4rem;
             font-size: 1.1rem;
             position: relative;

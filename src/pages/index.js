@@ -25,50 +25,61 @@ export default function Home({ quizzes }) {
       <main className={styles.container}>
         <div className={styles.containerTop}>
           <div className={styles.containerTop__title} >
-          <h1 className={styles.containerTitle} >Lance un match au hasard parmi tous nos quiz</h1>
-          <button className={styles.containerButton}>Let's Go</button></div>
+            <h1 className={styles.containerTitle} >Lance un match au hasard parmi tous nos quiz</h1>
+            <button className={styles.containerButton}>Let's Go</button></div>
           <h2 className={styles.containerTitle}>Ou choisis parmi les thèmes ci-dessous</h2>
         </div>
         <div className={styles.containerCards}>
           <div className={styles.containerCard}>
             <h3>Sélections nationales</h3>
             <div className={styles.containerCard__bottom}>
-              <div className={styles.containerCard__choice}>Tu peux choisir ton match 
-              <Link href="/search/selections-nationales">
-              <button>Ici</button> 
-              </Link></div>
-              <span>ou</span>
-              <div className={styles.containerCard__choice}>Lancer un quiz au hasard<button>Là</button></div>
-              
+              <div className={styles.containerCard__choice}>
+                Tu peux choisir ton match
+                <button>
+                  <Link href="/search/selections-nationales">
+                    Ici
+                  </Link>
+                </button>
               </div>
+              <span>ou</span>
+              <div className={styles.containerCard__choice}>
+                Lancer un quiz au hasard
+                <button>
+                  <Link href="/quiz/1">
+                    Là
+                  </Link>
+                </button>
+              </div>
+
             </div>
-            <div className={styles.containerCard}>
+          </div>
+          <div className={styles.containerCard}>
             <h3>Ligue 1</h3>
             <div className={styles.containerCard__bottom}>
               <div className={styles.containerCard__choice}>Tu peux choisir ton match <button>Ici</button> </div>
               <span>ou</span>
               <div className={styles.containerCard__choice}>Lancer un quiz au hasard <button>Là</button></div>
-              
-              </div>
+
             </div>
-            <div className={styles.containerCard}>
+          </div>
+          <div className={styles.containerCard}>
             <h3>Ligue des champions</h3>
             <div className={styles.containerCard__bottom}>
               <div className={styles.containerCard__choice}>Tu peux choisir ton match <button>Ici</button> </div>
               <span>ou</span>
               <div className={styles.containerCard__choice}>Lancer un quiz au hasard <button>Là</button></div>
-              
-              </div>
+
             </div>
-            <div className={styles.containerCard}>
+          </div>
+          <div className={styles.containerCard}>
             <h3>Championnats étrangers</h3>
             <div className={styles.containerCard__bottom}>
               <div className={styles.containerCard__choice}>Tu peux choisir ton match <button>Ici</button> </div>
               <span>ou</span>
               <div className={styles.containerCard__choice}>Lancer un quiz au hasard<button>Là</button></div>
-              
-              </div>
+
             </div>
+          </div>
         </div>
 
       </main>

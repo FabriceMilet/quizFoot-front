@@ -8,15 +8,18 @@
     font-family: 'noto';
     src: url('../../public/fonts/NotoSerifJP-Regular.woff')
 }
+@font-face {
+    font-family: 'nunito';
+    src: url('../../public/fonts/Nunito-Italic-VariableFont_wght.woff2');
+    src: url('../../public/fonts/Nunito-VariableFont_wght.woff2')
+}
 
 body {
-    // background-color: vars.$white; 
     background: linear-gradient(
-    225deg,
-    vars.$white,
-    vars.$lightblue-light,
-    vars.$lightgreen
+    90deg,
+    vars.$blue,
+    vars.$lightblue
   );
-  background-size: 400% 400%;
-    font-family: 'goodtime';
+  // background-size: 120% 120%;
+    font-family: 'nunito';
 }
