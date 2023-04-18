@@ -9,6 +9,9 @@
         color: vars.$white-darker;
         text-shadow: 2px 1px 2px vars.$green;
     }
+    &Subtitle{
+        text-align: center;
+    }
     &Game{
         padding-top: 2rem;
         display: flex;
@@ -41,7 +44,6 @@
         &__bottom{
             height: 50%;
             display: flex;
-            // gap: 10%;
             justify-content: center;
         }
         &__announcement{

@@ -3,19 +3,21 @@ import styles from '../../styles/Quiz.module.scss'
 import axios from 'axios';
 import Timer from '../../components/Timer'
 import Count from '../../components/Count'
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import ResultAnnouncement from '@/components/ResultAnnouncement';
 
 export async function getServerSideProps({ params }) {
   try {
     const { id } = params;
-    const res = await axios(`http://localhost:1337/api/quizzes-with-all-info`);
+    console.log('id', id);
+    const res = await axios(`http://localhost:1337/api/quiz-with-all-info/${id}`);
+    // const res = await axios(`http://localhost:1337/api/quizzes-with-all-info`);
     const data = res.data;
     console.log('datasss', data);
-    const filteredData = data?.filter((quiz) => quiz.id == id);
-    console.log('filteredDat', filteredData);
+   //  const filteredData = data?.filter((quiz) => quiz.id == id);
+   //  console.log('filteredDat', filteredData);
     return {
-      props: { quiz: filteredData[0] },
+      props: { quiz: data },
     }
   }
   catch (err) {
@@ -24,38 +26,64 @@ export async function getServerSideProps({ params }) {
 }
 
 export default function Quiz({ quiz }) {
-  const answer = quiz.players.map(player => player.name.toLowerCase());
+  console.log('quiz',quiz);
+  // on initialise les tableaux de bonnes réponses (un tableau par éauipe avec le nom des 11 joueurs)
+  const [answer1, setAnswer1] = useState(
+    quiz.players
+      ?.filter(player => player.teams.includes(quiz.teams[0].name))
+      .map(player => player.name.toLowerCase())
+  );
+  console.log('answer1', answer1);
+  const [answer2, setAnswer2] = useState(
+    quiz.players
+      ?.filter(player => player.teams.includes(quiz.teams[1].name))
+      .map(player => player.name.toLowerCase())
+  );
 
-  const [form1Data, setForm1Data] = useState({ name: '' });
-  const [form2Data, setForm2Data] = useState({ name: '' });
+  const [form1Data, setForm1Data] = useState({ name1: '' });
+  const [form2Data, setForm2Data] = useState({ name2: '' });
   const [answersCorrect, setAnswersCorrect] = useState(0);
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const form1Answer = form1Data.name.trim();
-    const form2Answer = form2Data.name.trim();
+    const form1Answer = form1Data.name1.trim();
+    const form2Answer = form2Data.name2.trim();
 
-    if (answer.includes(form1Answer.toLowerCase()) || answer.includes(form2Answer.toLowerCase())) {
+    if (answer1.includes(form1Answer.toLowerCase()) ) {
       setAnswersCorrect(answersCorrect + 1);
-      console.log('Answers are correct.');
-    } else {
-      console.log('Answers are incorrect.');
+      console.log('Answer are correct.');
+      // console.log('quiz.teams', quiz.teams );
+      const index1 = answer1.indexOf(form1Answer);
+      // const index2 = answer.indexOf(form2Answer);
+      let newAnswer = answer1.filter((item, index) => index !== index1);
+      console.log('newAnswer', newAnswer);
+      setAnswer1(newAnswer);
+      setForm1Data('')
+    } 
+    else if (answer2.includes(form2Answer.toLowerCase())){
+      setAnswersCorrect(answersCorrect + 1);
+      console.log('Answer are correct.');
+      // console.log('quiz.teams', quiz.teams );
+      const index2 = answer2.indexOf(form2Answer);
+      // const index2 = answer.indexOf(form2Answer);
+      let newAnswer = answer2.filter((item, index) => index !== index2);
+      console.log('newAnswer', newAnswer);
+      setAnswer2(newAnswer);
+    }
+    else {
+      console.log('Answer are incorrect.');
     }
   };
 
   const handleForm1Change = (event) => {
-    setForm1Data({ name: event.target.value });
+    setForm1Data({ name1: event.target.value });
   };
 
   const handleForm2Change = (event) => {
-    setForm2Data({ name: event.target.value });
+    setForm2Data({ name2: event.target.value });
   };
 
-  if (answersCorrect == 22) {
-
-  }
-  // console.log('saluquizt', quiz);
   return (
     <div>
       <Head>
@@ -68,16 +96,17 @@ export default function Quiz({ quiz }) {
 
       <main className={styles.container}>
         <h1 className={styles.containerTitle}>{quiz.title}</h1>
+        <h2 className={styles.containerSubtitle}>{quiz.description}</h2>
         <div className={styles.containerGame}>
           <div className={styles.containerPlayground}>
             <div className={styles.containerPlayground__forms}>
               <form className={styles.containerPlayground__form} onSubmit={handleSubmit}>
-                <label htmlFor="name1" autocomplete="off">{quiz.teams[0].name}</label>
-                <input type="text" id="name1" name="name1" value={form1Data.name1} onChange={handleForm1Change} />
+                <label htmlFor="name1" autoComplete="off">{quiz.teams[0].name}</label>
+                <input type="text" id="name1" name="name1" value={form1Data.name} onChange={handleForm1Change} />
               </form>
               <form className={styles.containerPlayground__form} onSubmit={handleSubmit}>
-                <label htmlFor="name2" autocomplete="off">{quiz.teams[1].name}</label>
-                <input type="text" id="name2" name="name2" value={form1Data.name2} onChange={handleForm2Change} />
+                <label htmlFor="name2" autoComplete="off">{quiz.teams[1].name}</label>
+                <input type="text" id="name2" name="name2" value={form2Data.name} onChange={handleForm2Change} />
               </form>
             </div>
             {answersCorrect < 22 ? <div className={styles.containerPlayground__bottom}>
