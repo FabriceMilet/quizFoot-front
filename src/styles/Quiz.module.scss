@@ -69,14 +69,24 @@
         width: 50%;
         display: flex;
         padding-left: 2rem;
+        text-align: center;
         &__team{
             width: 50%;
             & h2{
                 text-align: center;
+                width: 50%;
+                margin: auto;
+                border-bottom: 2px solid vars.$green-light;
             }
         }
         &__position {
             padding-top: 1rem;
+            & h3, h4{
+                font-size: 1.1rem;
+                color: vars.$green-light;
+                padding-bottom: 0.2rem;
+                padding-top: 0.2rem;
+            }
         }
     }
 }

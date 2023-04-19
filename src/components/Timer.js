@@ -5,14 +5,15 @@ import styles from '../styles/Quiz.module.scss'
 function Timer() {
     // temps initial en secondes
   const [timeLeft, setTimeLeft] = useState(5 * 60); 
+  const [intervalId, setIntervalId] = useState(null);
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
+    const id = setInterval(() => {
       setTimeLeft((prevTime) => prevTime - 1);
     }, 1000);
 
     // on nettoye l'intervalle quand le composant est démonté
-    return () => clearInterval(intervalId);
+    return () => clearInterval(id);
   }, []);
 
   const minutes = Math.floor(timeLeft / 60);
@@ -23,7 +24,7 @@ function Timer() {
     if (timeLeft <= 0) {
       clearInterval(intervalId);
     }
-  }, [timeLeft]);
+  }, [timeLeft, intervalId]);
 
   return (
     <div className={styles.containerPlayground__timer}>

@@ -13,9 +13,9 @@ export async function getServerSideProps({ params }) {
     const res = await axios(`http://localhost:1337/api/quiz-with-all-info/${id}`);
     // const res = await axios(`http://localhost:1337/api/quizzes-with-all-info`);
     const data = res.data;
-    console.log('datasss', data);
-   //  const filteredData = data?.filter((quiz) => quiz.id == id);
-   //  console.log('filteredDat', filteredData);
+    // console.log('datasss', data);
+    //  const filteredData = data?.filter((quiz) => quiz.id == id);
+    //  console.log('filteredDat', filteredData);
     return {
       props: { quiz: data },
     }
@@ -26,14 +26,14 @@ export async function getServerSideProps({ params }) {
 }
 
 export default function Quiz({ quiz }) {
-  console.log('quiz',quiz);
+  // console.log('quiz',quiz);
   // on initialise les tableaux de bonnes réponses (un tableau par éauipe avec le nom des 11 joueurs)
   const [answer1, setAnswer1] = useState(
     quiz.players
       ?.filter(player => player.teams.includes(quiz.teams[0].name))
       .map(player => player.name.toLowerCase())
   );
-  console.log('answer1', answer1);
+  // console.log('answer1', answer1);
   const [answer2, setAnswer2] = useState(
     quiz.players
       ?.filter(player => player.teams.includes(quiz.teams[1].name))
@@ -50,18 +50,44 @@ export default function Quiz({ quiz }) {
     const form1Answer = form1Data.name1.trim();
     const form2Answer = form2Data.name2.trim();
 
-    if (answer1.includes(form1Answer.toLowerCase()) ) {
+    if (answer1.includes(form1Answer.toLowerCase())) {
       setAnswersCorrect(answersCorrect + 1);
       console.log('Answer are correct.');
       // console.log('quiz.teams', quiz.teams );
-      const index1 = answer1.indexOf(form1Answer);
+      const index1 = answer1.indexOf(form1Answer.toLowerCase());
       // const index2 = answer.indexOf(form2Answer);
       let newAnswer = answer1.filter((item, index) => index !== index1);
       console.log('newAnswer', newAnswer);
+      // on refait un tableau dans lequel on a enlevé la bonne réponse
       setAnswer1(newAnswer);
-      setForm1Data('')
-    } 
-    else if (answer2.includes(form2Answer.toLowerCase())){
+      // ici on récupère le bon joueur que l'on va chercher à ajouter dans le rendu
+
+      let correctPlayer;
+      for (let i = 0; i < quiz.players.length; i++) {
+        if (quiz.players[i].name.toLowerCase() === form1Answer.toLowerCase())
+        // && (quiz.players[i].team === quiz.teams[0].name || quiz.players[i].team === quiz.teams[1].name))
+        {
+          correctPlayer = quiz.players[i];
+          break;
+        }
+      }
+      console.log('correctPlayer', correctPlayer);
+      // on ajoute le joueur dans le rendu 
+      let h3s = document.querySelectorAll('h3');
+      let positionElem;
+      for (let i = 0; i < h3s.length; i++) {
+        if (h3s[i].textContent === correctPlayer.position) {
+          positionElem = h3s[i];
+          break;
+        }
+      }
+      let playerElement = document.createElement('p');
+      playerElement.textContent = correctPlayer.name;
+      positionElem.parentNode.insertBefore(playerElement, positionElem.nextSibling);
+      // et on vide l'input
+      event.target.reset();
+    }
+    else if (answer2.includes(form2Answer.toLowerCase())) {
       setAnswersCorrect(answersCorrect + 1);
       console.log('Answer are correct.');
       // console.log('quiz.teams', quiz.teams );
@@ -70,6 +96,32 @@ export default function Quiz({ quiz }) {
       let newAnswer = answer2.filter((item, index) => index !== index2);
       console.log('newAnswer', newAnswer);
       setAnswer2(newAnswer);
+       // ici on récupère le bon joueur que l'on va chercher à ajouter dans le rendu
+
+       let correctPlayer;
+       for (let i = 0; i < quiz.players.length; i++) {
+         if (quiz.players[i].name.toLowerCase() === form2Answer.toLowerCase())
+         // && (quiz.players[i].team === quiz.teams[0].name || quiz.players[i].team === quiz.teams[1].name))
+         {
+           correctPlayer = quiz.players[i];
+           break;
+         }
+       }
+       console.log('correctPlayer', correctPlayer);
+       // on ajoute le joueur dans le rendu 
+       let h4s = document.querySelectorAll('h4');
+       let positionElem;
+       for (let i = 0; i < h4s.length; i++) {
+         if (h4s[i].textContent === correctPlayer.position) {
+           positionElem = h4s[i];
+           break;
+         }
+       }
+       let playerElement = document.createElement('p');
+       playerElement.textContent = correctPlayer.name;
+       positionElem.parentNode.insertBefore(playerElement, positionElem.nextSibling);
+       // et on vide l'input
+      event.target.reset();
     }
     else {
       console.log('Answer are incorrect.');
@@ -87,7 +139,6 @@ export default function Quiz({ quiz }) {
   return (
     <div>
       <Head>
-        {/* ici on pourra mettre le nom du quiz en titre */}
         <title>Trouve la compo de {quiz.title}</title>
         <meta name="description" content="Jeux, quiz sur le football. Le but est de trouver la compo d'un match de foot" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -120,27 +171,27 @@ export default function Quiz({ quiz }) {
               <h2>{quiz.teams[0].name}</h2>
               <div className={styles.containerResult__position}>
                 <h3>Gardien</h3>
-  
+
                 <h3>Défenseur</h3>
 
                 <h3>Milieu</h3>
 
                 <h3>Attaquant</h3>
-                </div>
               </div>
-               
-              <div className={styles.containerResult__team}>
+            </div>
+
+            <div className={styles.containerResult__team}>
               <h2>{quiz.teams[1].name}</h2>
               <div className={styles.containerResult__position}>
-                <h3>Gardien</h3>
-  
-                <h3>Défenseur</h3>
+                <h4>Gardien</h4>
 
-                <h3>Milieu</h3>
+                <h4>Défenseur</h4>
 
-                <h3>Attaquant</h3>
-                </div>
+                <h4>Milieu</h4>
+
+                <h4>Attaquant</h4>
               </div>
+            </div>
           </div>
         </div>
       </main>
