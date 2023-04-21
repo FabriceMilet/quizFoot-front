@@ -5,6 +5,7 @@ import { getQuizzes } from '@/store/slices/quiz.slice';
 import { useSelector, useDispatch } from "react-redux";
 import axios from 'axios';
 import Link from 'next/link';
+import { FaArrowAltCircleDown } from "react-icons/fa";
 
 export default function Home({ quizzes }) {
   // const dispatch = useDispatch();
@@ -27,7 +28,7 @@ export default function Home({ quizzes }) {
           <div className={styles.containerTop__title} >
             <h1 className={styles.containerTitle} >Lance un match au hasard parmi tous nos quiz</h1>
             <button className={styles.containerButton}>Let's Go</button></div>
-          <h2 className={styles.containerTitle}>Ou choisis parmi les thèmes ci-dessous</h2>
+          <h2 className={styles.containerTitle}><div>Ou choisis parmi les thèmes ci-dessous</div> <FaArrowAltCircleDown className={styles.containerArrow}/></h2>
         </div>
         <div className={styles.containerCards}>
           <div className={styles.containerCard}>
