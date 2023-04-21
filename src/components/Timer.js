@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { FaRegClock } from "react-icons/fa";
 import styles from '../styles/Quiz.module.scss'
 
-function Timer() {
+function Timer({onTimerEnd}) {
     // temps initial en secondes
   const [timeLeft, setTimeLeft] = useState(5 * 60); 
   const [intervalId, setIntervalId] = useState(null);
@@ -19,12 +19,16 @@ function Timer() {
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;
 
-  // on arrête le timer à 0 et on clean
+  // on arrête le timer à 0, on excecute la fonction onTimerEnd 
+  // pour dire au composant parent qu'on est arrivé à 0 et on clean
   useEffect(() => {
     if (timeLeft <= 0) {
       clearInterval(intervalId);
+      if (onTimerEnd) {
+        onTimerEnd();
+      }
     }
-  }, [timeLeft, intervalId]);
+  }, [timeLeft, intervalId, onTimerEnd]);
 
   return (
     <div className={styles.containerPlayground__timer}>
