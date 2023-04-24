@@ -1,16 +1,14 @@
 import axios from "axios";
 import Head from 'next/head'
-import styles from '../../styles/Search.module.scss'
+import styles from '../styles/Search.module.scss'
 import Link from 'next/link';
 
-export async function getServerSideProps({ params }) {
+export async function getServerSideProps() {
   try{
-  const { category } = params;
   const res = await axios(`http://localhost:1337/api/quizzes-with-all-info`);
   const data = res.data;
-  const filteredData = data?.filter((quiz) => quiz.category.slug === category);
   return {
-    props: { quizzes: filteredData },
+    props: { quizzes: data },
   }}
   catch(err){
     console.error(err)
@@ -19,7 +17,6 @@ export async function getServerSideProps({ params }) {
 
 export default function Search({quizzes}) {
 // console.log(quizzes)
-
   return (
     <div>
       <Head>
@@ -29,12 +26,12 @@ export default function Search({quizzes}) {
         <link rel="icon" href="/images/tlc.png" />
       </Head>
     <main className={styles.container}>
-    <h1>Choisis entre ces matchs de {quizzes[0].category.name}</h1>
+    <h1>Choisis un match parmi tous nos quiz</h1>
     <ul>
     {quizzes.map((quiz) =>(
      <li>
         - {quiz.title} : {quiz.description}
-        <button className={styles.containerButton} ><Link key={quiz.id} href={`/quiz/${quiz.id}`}>Go</Link></button></li> 
+        <button className={styles.containerButton}><Link key={quiz.id} href={`/quiz/${quiz.id}`}>Go</Link></button></li> 
       ))}
       </ul>
     </main>

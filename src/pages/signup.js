@@ -1,7 +1,42 @@
 import Head from 'next/head'
 import styles from '../styles/Signup.module.scss'
+import axios from 'axios'
+import { useState } from 'react'
+import { useRouter } from 'next/router';
+// import { setToken } from '../lib/auth';
 
-export default function Signup({}) {
+export default function Signup({ }) {
+  const router = useRouter();
+  const [userData, setUserData] = useState({
+    username: '',
+    email: '',
+    password: '',
+  });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const responseData = await axios.post(
+        `${process.env.NEXT_PUBLIC_STRAPI_URL}/auth/local/register`,
+        {
+          email: userData.email,
+          password: userData.password,
+          username: userData.username,
+        }
+      );
+      console.log('responseData.data', responseData.data);
+      // setToken(responseData.data.jwt);
+      router.redirect('/profile');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserData({ ...userData, [name]: value });
+  };
+
 
   return (
     <div>
@@ -11,9 +46,51 @@ export default function Signup({}) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/images/tlc.png" />
       </Head>
-    <main className={styles.container}>
-   ici viendra la page de Signup
-    </main>
+      <main className={styles.container}>
+        <h1>Inscription</h1>
+        <form
+          onSubmit={handleSubmit}
+        >
+          <div>
+            <label htmlFor="username">
+              Pseudo
+            </label>
+            <input
+              type="text"
+              name="username"
+              onChange={(e) => handleChange(e)}
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="email">
+              Email
+            </label>
+            <input
+              type="email"
+              name="email"
+              onChange={(e) => handleChange(e)}
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="password">
+              Mot de passe
+            </label>
+            <input
+              type="password"
+              name="password"
+              onChange={(e) => handleChange(e)}
+              required
+            />
+          </div>
+          <button
+            type="submit"
+          >
+            S'inscrire
+          </button>
+        </form>
+      </main>
     </div>
   )
 }

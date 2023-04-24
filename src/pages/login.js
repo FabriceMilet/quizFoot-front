@@ -11,9 +11,31 @@ export default function Login({}) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/images/tlc.png" />
       </Head>
-    <main className={styles.container}>
-   ici viendra la page de Login
-    </main>
+      <main className={styles.container}>
+        <h1>Se connecter</h1>
+        <form onSubmit={handleSubmit}>
+                  <input
+                    type="text"
+                    name="identifier"
+                    onChange={handleChange}
+                    placeholder="Pseudo"
+                    required
+                  />
+                  <input
+                    type="password"
+                    name="password"
+                    onChange={handleChange}
+                    placeholder="Mot de passe"
+                    required
+                  />
+
+                  <button
+                    type="submit"
+                  >
+                    S'inscrire
+                  </button>
+                </form>
+      </main>
     </div>
   )
 }
