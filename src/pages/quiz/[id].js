@@ -9,7 +9,7 @@ import ResultAnnouncement from '@/components/ResultAnnouncement';
 export async function getServerSideProps({ params }) {
   try {
     const { id } = params;
-    console.log('id', id);
+    // console.log('id', id);
     const res = await axios(`http://localhost:1337/api/quiz-with-all-info/${id}`);
     // const res = await axios(`http://localhost:1337/api/quizzes-with-all-info`);
     const data = res.data;
@@ -45,45 +45,43 @@ export default function Quiz({ quiz }) {
   const [answersCorrect, setAnswersCorrect] = useState(0);
   const [giveUp, setGiveUp] = useState(false)
 
-  // on met en place une fonction de vérification de réponse en utilisant l'algorithme de Levenshtein
-  // qui est une méthode utilisée pour mesurer la différence entre deux chaînes de caractères
+  // !TODO on met en place une fonction de vérification de réponse en utilisant l'algorithme de Levenshtein
+  // qui est une méthode utilisée pour mesurer la différence entre deux chaînes de caractères 
 
+  // function checkAnswer(userAnswer, correctAnswer) {
+  //   // Convertir les réponses en minuscules pour éviter les erreurs de casse
+  //   userAnswer = userAnswer.toLowerCase();
+  //   correctAnswer = correctAnswer.toLowerCase();
 
+  //   // Calculer la distance de Levenshtein entre les deux chaînes
+  //   const levenshteinDistance = computeLevenshteinDistance(userAnswer, correctAnswer);
 
-  function checkAnswer(userAnswer, correctAnswer) {
-    // Convertir les réponses en minuscules pour éviter les erreurs de casse
-    userAnswer = userAnswer.toLowerCase();
-    correctAnswer = correctAnswer.toLowerCase();
+  //   // Déterminer si la réponse de l'utilisateur est correcte (distance inférieure à une certaine valeur)
+  //   const maxDistance = 2; // la distance maximale pour accepter la réponse
+  //   return levenshteinDistance <= maxDistance;
+  // }
 
-    // Calculer la distance de Levenshtein entre les deux chaînes
-    const levenshteinDistance = computeLevenshteinDistance(userAnswer, correctAnswer);
-
-    // Déterminer si la réponse de l'utilisateur est correcte (distance inférieure à une certaine valeur)
-    const maxDistance = 2; // la distance maximale pour accepter la réponse
-    return levenshteinDistance <= maxDistance;
-  }
-
-  function computeLevenshteinDistance(s, t) {
-    const m = s.length;
-    const n = t.length;
-    const d = [];
-    for (let i = 0; i <= m; i++) {
-      d[i] = [i];
-    }
-    for (let j = 0; j <= n; j++) {
-      d[0][j] = j;
-    }
-    for (let j = 1; j <= n; j++) {
-      for (let i = 1; i <= m; i++) {
-        if (s[i - 1] === t[j - 1]) {
-          d[i][j] = d[i - 1][j - 1];
-        } else {
-          d[i][j] = Math.min(d[i - 1][j], d[i][j - 1], d[i - 1][j - 1]) + 1;
-        }
-      }
-    }
-    return d[m][n];
-  }
+  // function computeLevenshteinDistance(s, t) {
+  //   const m = s.length;
+  //   const n = t.length;
+  //   const d = [];
+  //   for (let i = 0; i <= m; i++) {
+  //     d[i] = [i];
+  //   }
+  //   for (let j = 0; j <= n; j++) {
+  //     d[0][j] = j;
+  //   }
+  //   for (let j = 1; j <= n; j++) {
+  //     for (let i = 1; i <= m; i++) {
+  //       if (s[i - 1] === t[j - 1]) {
+  //         d[i][j] = d[i - 1][j - 1];
+  //       } else {
+  //         d[i][j] = Math.min(d[i - 1][j], d[i][j - 1], d[i - 1][j - 1]) + 1;
+  //       }
+  //     }
+  //   }
+  //   return d[m][n];
+  // }
 
 
 
