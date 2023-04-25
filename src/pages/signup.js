@@ -31,7 +31,7 @@ export default function Signup({ }) {
       );
       console.log('responseData.data', responseData.data);
       setToken(responseData.data);
-      // router.redirect('/profile');
+      router.push('/profile');
     } catch (error) {
       console.log(error.response);
     }
@@ -52,11 +52,12 @@ export default function Signup({ }) {
         <link rel="icon" href="/images/tlc.png" />
       </Head>
       <main className={styles.container}>
-        <h1>Inscription</h1>
+        <h1 className={styles.containerTitle}>Inscription</h1>
         <form
           onSubmit={handleSubmit}
+          className={styles.containerForm}
         >
-          <div>
+          <div className={styles.containerForm__case}>
             <label htmlFor="username">
               Pseudo
             </label>
@@ -64,10 +65,12 @@ export default function Signup({ }) {
               type="text"
               name="username"
               onChange={(e) => handleChange(e)}
+              placeholder="pseudo"
+              autoComplete="off"
               required
             />
           </div>
-          <div>
+          <div className={styles.containerForm__case}>
             <label htmlFor="email">
               Email
             </label>
@@ -75,10 +78,12 @@ export default function Signup({ }) {
               type="email"
               name="email"
               onChange={(e) => handleChange(e)}
+              placeholder="email"
+              autoComplete="off"
               required
             />
           </div>
-          <div>
+          <div className={styles.containerForm__case}>
             <label htmlFor="password">
               Mot de passe
             </label>
@@ -86,6 +91,8 @@ export default function Signup({ }) {
               type="password"
               name="password"
               onChange={(e) => handleChange(e)}
+              placeholder="mot de passe"
+              autoComplete="off"
               required
             />
           </div>

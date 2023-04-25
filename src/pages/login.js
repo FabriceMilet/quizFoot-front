@@ -1,20 +1,45 @@
 import Head from 'next/head'
 import styles from '../styles/Login.module.scss'
+import { useRouter } from 'next/router';
 import { useState } from 'react'
+import { setToken } from '@/lib/auth';
+import axios from 'axios';
 
-export default function Login({}) {
+export default function Login() {
+  const router = useRouter();
   const [userData, setUserData] = useState({
-    username: '',
+    email: '',
     password: '',
   });
 
-const handleSubmit = () => {
-
-}
-const handleChange = (e) => {
-  const { name, value } = e.target;
-  setUserData({ ...userData, [name]: value });
-};
+  const handleSubmit = async (e) => {
+    console.log('userData.email', userData.email);
+    console.log('userData.password', userData.password);
+    e.preventDefault();
+    try {
+      const responseData = await axios.post(
+        `${process.env.NEXT_PUBLIC_STRAPI_URL}/auth/local`,
+        {
+          identifier: userData.email,
+          password: userData.password,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      console.log('responseData.data', responseData.data);
+      setToken(responseData.data);
+      router.push('/');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserData({ ...userData, [name]: value });
+  };
   return (
     <div>
       <Head>
@@ -24,29 +49,43 @@ const handleChange = (e) => {
         <link rel="icon" href="/images/tlc.png" />
       </Head>
       <main className={styles.container}>
-        <h1>Se connecter</h1>
-        <form onSubmit={handleSubmit}>
-                  <input
-                    type="text"
-                    name="identifier"
-                    onChange={(e) => handleChange(e)}
-                    placeholder="Pseudo"
-                    required
-                  />
-                  <input
-                    type="password"
-                    name="password"
-                    onChange={(e) => handleChange(e)}
-                    placeholder="Mot de passe"
-                    required
-                  />
+        <h1 className={styles.containerTitle}>Se connecter</h1>
+        <form onSubmit={handleSubmit} className={styles.containerForm}>
 
-                  <button
-                    type="submit"
-                  >
-                    S'inscrire
-                  </button>
-                </form>
+          <div className={styles.containerForm__case}>
+            <label htmlFor="email">
+              Email
+            </label>
+            <input
+              type="email"
+              name="email"
+              onChange={(e) => handleChange(e)}
+              placeholder="email"
+              autoComplete="off"
+              required
+            />
+          </div>
+          <div className={styles.containerForm__case}>
+            <label htmlFor="username">
+              Mot de passe
+            </label>
+            <input
+              type="password"
+              name="password"
+              onChange={(e) => handleChange(e)}
+              placeholder="Mot de passe"
+              autoComplete="off"
+              required
+            />
+          </div>
+
+
+          <button
+            type="submit"
+          >
+            Connexion
+          </button>
+        </form>
       </main>
     </div>
   )

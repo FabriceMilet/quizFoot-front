@@ -33,6 +33,7 @@ export const useFetchUser = () => {
     let isMounted = true;
     const resolveUser = async () => {
       const user = await getUserFromLocalCookie();
+      console.log('jusquici ca va', user);
       if (isMounted) {
         setUser({ user, loading: false });
       }

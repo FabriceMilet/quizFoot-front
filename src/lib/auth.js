@@ -12,11 +12,11 @@ export const setToken = (data) => {
   Cookies.set('username', data.user.username);
   Cookies.set('jwt', data.jwt);
 console.log('username', data.user.username);
-  if (Cookies.get('username')) {
-    // Router.reload('/');
-    Router.push('/profile');
-    console.log('username2', data.user.username);
-  }
+  // if (Cookies.get('username')) {
+  //   // Router.reload('/');
+  //   Router.push('/profile');
+  //   console.log('username2', data.user.username);
+  // }
 };
 
 export const unsetToken = () => {
@@ -32,6 +32,7 @@ export const unsetToken = () => {
 
 export const getUserFromLocalCookie = () => {
   const jwt = getTokenFromLocalCookie();
+  console.log('vérifi dans hook getUserFromLocalCookie', jwt);
   if (jwt) {
     return axios.get(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/me`, {
       headers: {
@@ -40,7 +41,8 @@ export const getUserFromLocalCookie = () => {
       },
     })
       .then((data) => {
-        return data.username;
+        console.log('vérifi dans hook getUserFromLocalCookie', data);
+        return data.data.username;
       })
       .catch((error) => console.error(error));
   } else {
@@ -57,7 +59,7 @@ export const getIdFromLocalCookie = () => {
         Authorization: `Bearer ${jwt}`,
       },
     }).then((data) => {
-      return data.id;
+      return data.data.id;
     });
   } else {
     return;

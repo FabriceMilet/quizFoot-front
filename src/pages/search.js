@@ -29,9 +29,9 @@ export default function Search({quizzes}) {
     <h1>Choisis un match parmi tous nos quiz</h1>
     <ul>
     {quizzes.map((quiz) =>(
-     <li>
+     <li key={quiz.id}>
         - {quiz.title} : {quiz.description}
-        <button className={styles.containerButton}><Link key={quiz.id} href={`/quiz/${quiz.id}`}>Go</Link></button></li> 
+        <button className={styles.containerButton}><Link  href={`/quiz/${quiz.id}`}>Go</Link></button></li> 
       ))}
       </ul>
     </main>
