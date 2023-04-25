@@ -1,8 +1,20 @@
 import Head from 'next/head'
 import styles from '../styles/Login.module.scss'
+import { useState } from 'react'
 
 export default function Login({}) {
+  const [userData, setUserData] = useState({
+    username: '',
+    password: '',
+  });
 
+const handleSubmit = () => {
+
+}
+const handleChange = (e) => {
+  const { name, value } = e.target;
+  setUserData({ ...userData, [name]: value });
+};
   return (
     <div>
       <Head>
@@ -17,14 +29,14 @@ export default function Login({}) {
                   <input
                     type="text"
                     name="identifier"
-                    onChange={handleChange}
+                    onChange={(e) => handleChange(e)}
                     placeholder="Pseudo"
                     required
                   />
                   <input
                     type="password"
                     name="password"
-                    onChange={handleChange}
+                    onChange={(e) => handleChange(e)}
                     placeholder="Mot de passe"
                     required
                   />

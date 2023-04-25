@@ -3,7 +3,7 @@ import styles from '../styles/Signup.module.scss'
 import axios from 'axios'
 import { useState } from 'react'
 import { useRouter } from 'next/router';
-// import { setToken } from '../lib/auth';
+import { setToken } from '../lib/auth';
 
 export default function Signup({ }) {
   const router = useRouter();
@@ -14,19 +14,8 @@ export default function Signup({ }) {
   });
 
   const handleSubmit = async (e) => {
-    console.log('userData.email', userData.email);
-    console.log('userData.password', userData.password);
-    console.log('userData.username', userData.username);
     e.preventDefault();
     try {
-      // const responseData = await axios.post(
-      //   `${process.env.NEXT_PUBLIC_STRAPI_URL}/auth/local/register`,
-      //   {
-      //     email: userData.email,
-      //     password: userData.password,
-      //     username: userData.username,
-      //   }
-      // );
       const responseData = await axios.post(
         `${process.env.NEXT_PUBLIC_STRAPI_URL}/auth/local/register`,
         {
@@ -41,8 +30,8 @@ export default function Signup({ }) {
         }
       );
       console.log('responseData.data', responseData.data);
-      // setToken(responseData.data.jwt);
-      router.redirect('/profile');
+      setToken(responseData.data);
+      // router.redirect('/profile');
     } catch (error) {
       console.log(error.response);
     }
