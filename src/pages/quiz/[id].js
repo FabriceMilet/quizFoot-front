@@ -6,6 +6,7 @@ import Count from '../../components/Count'
 import { useState } from 'react';
 import ResultAnnouncement from '@/components/ResultAnnouncement';
 import Cookies from 'js-cookie';
+import { useRouter } from 'next/router';
 
 export async function getServerSideProps({ params }) {
   try {
@@ -290,7 +291,7 @@ export default function Quiz({ quiz }) {
     const id = Cookies.get('id')
     try {
       const res = await axios.get(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}`);
-      console.log('resulta', res);
+      // console.log('resulta', res);
       const currentResult = res.data.result;
       const responseData = await axios.put(
         `${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}`,
@@ -303,7 +304,7 @@ export default function Quiz({ quiz }) {
           },
         }
       );
-      console.log('responseData', responseData);
+      // console.log('responseData', responseData);
     } catch (error) {
       console.log(error.response);
     }
@@ -311,11 +312,23 @@ export default function Quiz({ quiz }) {
 
   // fonction qui va ajouter un quiz à l'user quand ce quiz a été fait dans le but qu'un user ne puisse pas
   // faire deux fois le même quiz
-
+  const router = useRouter();
   const addQuiz = async () => {
-    const id = Cookies.get('id')
+   
+    const { id: quizId } = router.query;
+    const userId = Cookies.get('id')
+    console.log('userId', userId);
     try {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_STRAPI_URL}/user-with-quiz/${id}`);
+      const res = await axios.put(`${process.env.NEXT_PUBLIC_STRAPI_URL}/quizzes/${quizId}`,{
+        users_permissions_users: [{ id: userId, name: 'fabrice' }],
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+
       console.log('resulta', res);
   
     } catch (error) {
