@@ -8,6 +8,7 @@ export async function getServerSideProps({ params }) {
   const { category } = params;
   const res = await axios(`http://localhost:1337/api/quizzes-with-all-info`);
   const data = res.data;
+  // TODO remplacer par quiz.category.slug === category && quiz.users-permissions.id !== Cookies.get('id')
   const filteredData = data?.filter((quiz) => quiz.category.slug === category);
   return {
     props: { quizzes: filteredData },

@@ -5,6 +5,7 @@ import Timer from '../../components/Timer'
 import Count from '../../components/Count'
 import { useState } from 'react';
 import ResultAnnouncement from '@/components/ResultAnnouncement';
+import Cookies from 'js-cookie';
 
 export async function getServerSideProps({ params }) {
   try {
@@ -231,7 +232,7 @@ export default function Quiz({ quiz }) {
         if (quiz.players[i].name.toLowerCase() == player.toLowerCase()) {
           // on ajoute le joueur dans le rendu
           const correctPlayer = quiz.players[i];
-          
+
           let h3s = document.querySelectorAll("h3");
           let positionElem;
           for (let j = 0; j < h3s.length; j++) {
@@ -256,7 +257,7 @@ export default function Quiz({ quiz }) {
         if (quiz.players[i].name.toLowerCase() == player.toLowerCase()) {
           // on ajoute le joueur dans le rendu
           const correctPlayer = quiz.players[i];
-          
+
           let h4s = document.querySelectorAll("h4");
           let positionElem;
           for (let j = 0; j < h4s.length; j++) {
@@ -275,11 +276,56 @@ export default function Quiz({ quiz }) {
         }
       }
     });
+    addResult()
+    addQuiz()
   };
   const handleTimerEnd = () => {
     setGiveUp(true)
+    addResult()
+  }
+  // fonction qui appelle une route de post un nouveau score, cette fonction est appelé si
+  // handleClickOnGiveUp ou handleTimerEnd ou answersCorrect == 22
+
+  const addResult = async () => {
+    const id = Cookies.get('id')
+    try {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}`);
+      console.log('resulta', res);
+      const currentResult = res.data.result;
+      const responseData = await axios.put(
+        `${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}`,
+        {
+          result: currentResult + answersCorrect,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      console.log('responseData', responseData);
+    } catch (error) {
+      console.log(error.response);
+    }
   }
 
+  // fonction qui va ajouter un quiz à l'user quand ce quiz a été fait dans le but qu'un user ne puisse pas
+  // faire deux fois le même quiz
+
+  const addQuiz = async () => {
+    const id = Cookies.get('id')
+    try {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_STRAPI_URL}/user-with-quiz/${id}`);
+      console.log('resulta', res);
+  
+    } catch (error) {
+      console.log(error.response);
+    }
+  }
+
+  if (answersCorrect == 22) {
+    addResult()
+  }
   return (
     <div>
       <Head>

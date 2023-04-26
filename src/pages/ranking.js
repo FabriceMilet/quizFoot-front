@@ -1,8 +1,26 @@
 import Head from 'next/head'
 import styles from '../styles/Ranking.module.scss'
+import axios from 'axios';
 
-export default function Ranking({}) {
+export async function getServerSideProps() {
+  try {
+    const res = await axios(`http://localhost:1337/api/users`);
+    const data = res.data;
+    console.log('datasss', data);
+    return {
+      props: { users: data },
+    }
+  }
+  catch (err) {
+    console.error(err)
+  }
+}
 
+export default function Ranking({users}) {
+console.log('users', users);
+const filteredUsers = users.filter(user => user.result !== null);
+console.log('filteredUsers', filteredUsers);
+const sortedUsers = filteredUsers.sort((a, b) => b.result - a.result);
   return (
     <div>
       <Head>
@@ -12,7 +30,13 @@ export default function Ranking({}) {
         <link rel="icon" href="/images/tlc.png" />
       </Head>
     <main className={styles.container}>
-   ici viendra la page de classement général
+    <ul>
+          {sortedUsers.map((user, index) => (
+            <li key={user.id}>
+              {index + 1} - {user.username}: {user.result} {user.result == 1 ? 'point' : 'points'}
+            </li>
+          ))}
+        </ul>
     </main>
     </div>
   )
