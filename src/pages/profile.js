@@ -1,7 +1,10 @@
 import Head from 'next/head'
 import styles from '../styles/Profile.module.scss'
+import Cookies from 'js-cookie';
+import withAuth from '../lib/withAuth';
 
-export default function Profile({}) {
+const Profile = () => {
+  console.log(Cookies.get('jwt'));
 // on va pouvoir mettre le nom de l'user comme titre
   return (
     <div>
@@ -17,3 +20,4 @@ export default function Profile({}) {
     </div>
   )
 }
+export default withAuth(Profile);

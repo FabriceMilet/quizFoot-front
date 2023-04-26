@@ -1,19 +1,68 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.scss'
-import { useEffect } from 'react';
-import { getQuizzes } from '@/store/slices/quiz.slice';
-import { useSelector, useDispatch } from "react-redux";
+import { useRouter } from 'next/router';
 import axios from 'axios';
 import Link from 'next/link';
 import { FaArrowAltCircleDown } from "react-icons/fa";
 
-export default function Home({ quizzes }) {
-  // const dispatch = useDispatch();
-  // useEffect(() => {
-  //   dispatch(getQuizzes());
-  // }, []);
+export async function getServerSideProps() {
+  try {
+    const res = await axios(`http://localhost:1337/api/quizzes-with-all-info`);
+    const data = res.data;
+    return {
+      props: { quizzes: data },
+    }
+  }
+  catch (err) {
+    console.error(err)
+  }
+}
 
-  // const quizzes = useSelector((state) => state.quiz.quizzes);
+export default function Home({ quizzes }) {
+ 
+  const router = useRouter();
+
+  // on choisi au hasard un id parmi le tableau d'id et on renvoie vers ce quiz
+  const handleClickRandomAll = () => {
+      // on récupère un tableau avec les id de tous les quiz
+    const quizzesIdArray = quizzes.map(quiz => quiz.id);
+    const randomQuizIndex = Math.floor(Math.random() * quizzesIdArray.length);
+    const randomQuizId = quizzesIdArray[randomQuizIndex];
+    router.push(`/quiz/${randomQuizId}`);
+  };
+  // on fait de même avec les quiz par category
+  const handleClickRandomNationale = () => {
+    // on récupère un tableau avec les id des quiz sélections nationales
+    const filteredQuizzes = quizzes.filter((quiz) => quiz.category.name === 'Sélections nationales');
+    const quizzesIdArray = filteredQuizzes.map(quiz => quiz.id);
+    const randomQuizIndex = Math.floor(Math.random() * quizzesIdArray.length);
+    const randomQuizId = quizzesIdArray[randomQuizIndex];
+    router.push(`/quiz/${randomQuizId}`);
+  };
+  const handleClickRandomLigue1 = () => {
+    // on récupère un tableau avec les id des quiz ligue 1
+    const filteredQuizzes = quizzes.filter((quiz) => quiz.category.name === 'Ligue 1');
+    const quizzesIdArray = filteredQuizzes.map(quiz => quiz.id);
+    const randomQuizIndex = Math.floor(Math.random() * quizzesIdArray.length);
+    const randomQuizId = quizzesIdArray[randomQuizIndex];
+    router.push(`/quiz/${randomQuizId}`);
+  };
+  const handleClickRandomForreign = () => {
+    // on récupère un tableau avec les id des quiz championnats étrangers
+    const filteredQuizzes = quizzes.filter((quiz) => quiz.category.name === 'Championnats étrangers');
+    const quizzesIdArray = filteredQuizzes.map(quiz => quiz.id);
+    const randomQuizIndex = Math.floor(Math.random() * quizzesIdArray.length);
+    const randomQuizId = quizzesIdArray[randomQuizIndex];
+    router.push(`/quiz/${randomQuizId}`);
+  };
+  const handleClickRandomChampions = () => {
+    // on récupère un tableau avec les id des quiz ligue des champions
+    const filteredQuizzes = quizzes.filter((quiz) => quiz.category.name === 'Ligue des champions');
+    const quizzesIdArray = filteredQuizzes.map(quiz => quiz.id);
+    const randomQuizIndex = Math.floor(Math.random() * quizzesIdArray.length);
+    const randomQuizId = quizzesIdArray[randomQuizIndex];
+    router.push(`/quiz/${randomQuizId}`);
+  };
 
   return (
     <div>
@@ -27,8 +76,8 @@ export default function Home({ quizzes }) {
         <div className={styles.containerTop}>
           <div className={styles.containerTop__title} >
             <h1 className={styles.containerTitle} >Lance un match au hasard parmi tous nos quiz</h1>
-            <button className={styles.containerButton}>Let's Go</button></div>
-          <h2 className={styles.containerTitle}><div>Ou choisis parmi les thèmes ci-dessous</div> <FaArrowAltCircleDown className={styles.containerArrow}/></h2>
+            <button className={styles.containerButton} onClick={handleClickRandomAll}>Let's Go</button></div>
+          <h2 className={styles.containerTitle}><div>Ou choisis parmi les thèmes ci-dessous</div> <FaArrowAltCircleDown className={styles.containerArrow} /></h2>
         </div>
         <div className={styles.containerCards}>
           <div className={styles.containerCard}>
@@ -45,10 +94,8 @@ export default function Home({ quizzes }) {
               <span>ou</span>
               <div className={styles.containerCard__choice}>
                 Lancer un quiz au hasard
-                <button>
-                  <Link href="/quiz/1">
-                    Là
-                  </Link>
+                <button onClick={handleClickRandomNationale}>
+                  Là
                 </button>
               </div>
 
@@ -57,27 +104,33 @@ export default function Home({ quizzes }) {
           <div className={styles.containerCard}>
             <h3>Ligue 1</h3>
             <div className={styles.containerCard__bottom}>
-              <div className={styles.containerCard__choice}>Tu peux choisir ton match <button>Ici</button> </div>
+              <div className={styles.containerCard__choice}>Tu peux choisir ton match <button><Link href="/search/ligue-1">
+                Ici
+              </Link></button> </div>
               <span>ou</span>
-              <div className={styles.containerCard__choice}>Lancer un quiz au hasard <button>Là</button></div>
+              <div className={styles.containerCard__choice}>Lancer un quiz au hasard <button onClick={handleClickRandomLigue1}>Là</button></div>
 
             </div>
           </div>
           <div className={styles.containerCard}>
             <h3>Ligue des champions</h3>
             <div className={styles.containerCard__bottom}>
-              <div className={styles.containerCard__choice}>Tu peux choisir ton match <button>Ici</button> </div>
+              <div className={styles.containerCard__choice}>Tu peux choisir ton match <button><Link href="/search/ligue-des-champions">
+                Ici
+              </Link></button> </div>
               <span>ou</span>
-              <div className={styles.containerCard__choice}>Lancer un quiz au hasard <button>Là</button></div>
+              <div className={styles.containerCard__choice}>Lancer un quiz au hasard <button onClick={handleClickRandomChampions}>Là</button></div>
 
             </div>
           </div>
           <div className={styles.containerCard}>
             <h3>Championnats étrangers</h3>
             <div className={styles.containerCard__bottom}>
-              <div className={styles.containerCard__choice}>Tu peux choisir ton match <button>Ici</button> </div>
+              <div className={styles.containerCard__choice}>Tu peux choisir ton match <button><Link href="/search/championnats-etrangers">
+                Ici
+              </Link></button> </div>
               <span>ou</span>
-              <div className={styles.containerCard__choice}>Lancer un quiz au hasard<button>Là</button></div>
+              <div className={styles.containerCard__choice}>Lancer un quiz au hasard<button onClick={handleClickRandomForreign}>Là</button></div>
 
             </div>
           </div>
@@ -86,34 +139,4 @@ export default function Home({ quizzes }) {
       </main>
     </div>
   )
-}
-// export async function getServerSideProps() {
-
-//   const quizzes = await getQuizzes();
-//   return {
-//     props: {
-//       quizzes,
-//     },
-//   };
-// }
-{/* <ul>
-{quizzes?.map((quiz)=>(
-  <li key={quiz.id}>
-    {quiz.attributes.title}
-  </li>
-)
-)}
-
-</ul>
-export async function getStaticProps() {
-  const response = await axios('http://localhost:1337/api/quizzes');
-  console.log(response.data.data); 
-  const data = await response.data.data;
-  const quizzes = data
-
-  return {
-    props: {
-       quizzes,
-    },
-  };
-} */}
+};
