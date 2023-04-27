@@ -4,6 +4,16 @@
     padding: 12.5rem 6rem 0;
     color: vars.$white;
     font-size: 1.1rem;
+    display: flex;
+    &Half{
+        width: 50%;
+        & h2 {
+            text-align: center;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            text-shadow: 1px .5px 1px vars.$green;
+        }
+    }
   
     & li {
         list-style: none;

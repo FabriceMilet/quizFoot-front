@@ -25,7 +25,7 @@ const [noMoreQuiz, setNoMoreQuiz] = useState(false)
 let quizzesNotDone
 if (userId){
   quizzesNotDone = quizzes?.filter(quiz => {
-    console.log('quiz', quiz);
+    // console.log('quiz', quiz);
     return !quiz.users_permissions_users.some(user => user.id == userId);
     } );
   }else{

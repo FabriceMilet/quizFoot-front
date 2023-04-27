@@ -98,7 +98,7 @@ export default function Quiz({ quiz }) {
 
 
       setAnswersCorrect(answersCorrect + 1);
-      console.log('Answer are correct.');
+      // console.log('Answer are correct.');
       // console.log('quiz.teams', quiz.teams );
       const index1 = answer1.indexOf(form1Answer.toLowerCase());
       // const index2 = answer.indexOf(form2Answer);
@@ -279,16 +279,19 @@ export default function Quiz({ quiz }) {
     });
     addResult()
     addQuiz()
+    console.log('ca va');
   };
   const handleTimerEnd = () => {
     setGiveUp(true)
     addResult()
+    addQuiz()
   }
   // fonction qui appelle une route de post un nouveau score, cette fonction est appelé si
   // handleClickOnGiveUp ou handleTimerEnd ou answersCorrect == 22
 
   const addResult = async () => {
     const id = Cookies.get('id')
+    const jwt = Cookies.get('jwt')
     try {
       const res = await axios.get(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}`);
       // console.log('resulta', res);
@@ -301,12 +304,13 @@ export default function Quiz({ quiz }) {
         {
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${jwt}`
           },
         }
       );
-      // console.log('responseData', responseData);
+      console.log('responseDataAddResult', responseData);
     } catch (error) {
-      console.log(error.response);
+      console.error(error);
     }
   }
 
@@ -314,30 +318,31 @@ export default function Quiz({ quiz }) {
   // faire deux fois le même quiz
   const router = useRouter();
   const addQuiz = async () => {
-   
     const { id: quizId } = router.query;
     const userId = Cookies.get('id')
-    console.log('userId', userId);
+    const jwt = Cookies.get('jwt')
+    const userName = Cookies.get('username')
+   
     try {
-      const res = await axios.put(`${process.env.NEXT_PUBLIC_STRAPI_URL}/quizzes/${quizId}`,{
-        users_permissions_users: [{ id: userId, name: 'fabrice' }],
-      },
-      {
+      const res = await axios.put(`${process.env.NEXT_PUBLIC_STRAPI_URL}/quizzes/${quizId}`, {
+        data: {
+          users_permissions_users: [{ id: userId, name: userName }],
+        },
+      }, {
         headers: {
           'Content-Type': 'application/json',
+          // 'Authorization': `Bearer ${jwt}`
         },
       });
-
-
-      console.log('resulta', res);
-  
+      console.log('resultaAddQuiz', res);
     } catch (error) {
-      console.log(error.response);
+      console.log(error);
     }
   }
 
   if (answersCorrect == 22) {
     addResult()
+    addQuiz()
   }
   return (
     <div>

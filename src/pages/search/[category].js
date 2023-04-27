@@ -2,6 +2,8 @@ import axios from "axios";
 import Head from 'next/head'
 import styles from '../../styles/Search.module.scss'
 import Link from 'next/link';
+import Cookies from 'js-cookie';
+import { useEffect, useState } from "react";
 
 export async function getServerSideProps({ params }) {
   try{
@@ -20,6 +22,24 @@ export async function getServerSideProps({ params }) {
 
 export default function Search({quizzes}) {
 // console.log(quizzes)
+const userId = Cookies.get('id')
+const [noMoreQuiz, setNoMoreQuiz] = useState(false)
+
+let quizzesNotDone
+if (userId){
+  quizzesNotDone = quizzes?.filter(quiz => {
+    // console.log('quiz', quiz);
+    return !quiz.users_permissions_users.some(user => user.id == userId);
+    } );
+  }else{
+    quizzesNotDone = quizzes
+  }
+ console.log('quizzesNotDone', quizzesNotDone);
+ useEffect(() => {
+  if(quizzesNotDone && quizzesNotDone.length === 0) {
+     setNoMoreQuiz(true);
+  }
+}, [quizzesNotDone]);
 
   return (
     <div>
@@ -31,13 +51,32 @@ export default function Search({quizzes}) {
       </Head>
     <main className={styles.container}>
     <h1>Choisis entre ces matchs de {quizzes[0].category.name}</h1>
-    <ul>
+    {noMoreQuiz ? (
+          <div className={styles.containerAnnonce}>
+            Tu as fait tous les quiz de cette catégorie, essaie une autre !
+          </div>
+        ) : (
+          <ul>
+            {quizzesNotDone?.map((quiz) => (
+              <li key={quiz.id}>
+                - {quiz.title} : {quiz.description}
+                <button className={styles.containerButton}>
+                  <Link href={`/quiz/${quiz.id}`}>Go</Link>
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+
+
+
+    {/* <ul>
     {quizzes.map((quiz) =>(
-     <li>
+     <li key={quiz.id}>
         - {quiz.title} : {quiz.description}
-        <button className={styles.containerButton} ><Link key={quiz.id} href={`/quiz/${quiz.id}`}>Go</Link></button></li> 
+        <button className={styles.containerButton} ><Link  href={`/quiz/${quiz.id}`}>Go</Link></button></li> 
       ))}
-      </ul>
+      </ul> */}
     </main>
     </div>
   )
