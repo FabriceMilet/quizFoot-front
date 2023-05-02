@@ -1,3 +1,36 @@
+@use "../styles/vars";
+
 .container {
-    padding: 10.5rem 3rem 0;
+    padding: 12.5rem 6rem 0;
+    color: vars.$white;
+    font-size: 1.1rem;
+    display: flex;
+    &Half{
+        width: 50%;
+        & h2 {
+            text-align: center;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            text-shadow: 1px .5px 1px vars.$green;
+        }
+    }
+  
+    & li {
+        list-style: none;
+        margin-bottom: 0.3rem;
+    }
+
+    & ul li:first-child {
+        font-size: 2.5rem;
+        color: vars.$green;
+        text-shadow: 0.6px .6px .3px vars.$white;
+    }
+
+    ul li:nth-child(2) {
+        font-size: 2rem;
+    }
+
+    ul li:nth-child(3) {
+        font-size: 1.5rem;
+    }
 }

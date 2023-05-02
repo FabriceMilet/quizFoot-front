@@ -5,6 +5,8 @@ import Timer from '../../components/Timer'
 import Count from '../../components/Count'
 import { useState } from 'react';
 import ResultAnnouncement from '@/components/ResultAnnouncement';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/router';
 
 export async function getServerSideProps({ params }) {
   try {
@@ -45,151 +47,101 @@ export default function Quiz({ quiz }) {
   const [answersCorrect, setAnswersCorrect] = useState(0);
   const [giveUp, setGiveUp] = useState(false)
 
-  // !TODO on met en place une fonction de vérification de réponse en utilisant l'algorithme de Levenshtein
+  // on met en place une fonction de vérification de réponse en utilisant l'algorithme de Levenshtein
   // qui est une méthode utilisée pour mesurer la différence entre deux chaînes de caractères 
 
-  // function checkAnswer(userAnswer, correctAnswer) {
-  //   // Convertir les réponses en minuscules pour éviter les erreurs de casse
-  //   userAnswer = userAnswer.toLowerCase();
-  //   correctAnswer = correctAnswer.toLowerCase();
+  function checkAnswer(userAnswer, correctAnswer) {
+    // on convertie les réponses en minuscules 
+    userAnswer = userAnswer.toLowerCase();
+    correctAnswer = correctAnswer.toLowerCase();
 
-  //   // Calculer la distance de Levenshtein entre les deux chaînes
-  //   const levenshteinDistance = computeLevenshteinDistance(userAnswer, correctAnswer);
+    // on calcule la distance de Levenshtein entre les deux chaînes
+    const levenshteinDistance = computeLevenshteinDistance(userAnswer, correctAnswer);
 
-  //   // Déterminer si la réponse de l'utilisateur est correcte (distance inférieure à une certaine valeur)
-  //   const maxDistance = 2; // la distance maximale pour accepter la réponse
-  //   return levenshteinDistance <= maxDistance;
-  // }
+    // on détermine si la réponse de l'utilisateur est correcte (distance inférieure à une certaine valeur)
+    const maxDistance = 2; // la distance maximale pour accepter la réponse
+    return levenshteinDistance <= maxDistance;
+  }
 
-  // function computeLevenshteinDistance(s, t) {
-  //   const m = s.length;
-  //   const n = t.length;
-  //   const d = [];
-  //   for (let i = 0; i <= m; i++) {
-  //     d[i] = [i];
-  //   }
-  //   for (let j = 0; j <= n; j++) {
-  //     d[0][j] = j;
-  //   }
-  //   for (let j = 1; j <= n; j++) {
-  //     for (let i = 1; i <= m; i++) {
-  //       if (s[i - 1] === t[j - 1]) {
-  //         d[i][j] = d[i - 1][j - 1];
-  //       } else {
-  //         d[i][j] = Math.min(d[i - 1][j], d[i][j - 1], d[i - 1][j - 1]) + 1;
-  //       }
-  //     }
-  //   }
-  //   return d[m][n];
-  // }
-
+  // ici, la fonction de calcul de levenstein
+  function computeLevenshteinDistance(s, t) {
+    const m = s.length;
+    const n = t.length;
+    const d = [];
+    for (let i = 0; i <= m; i++) {
+      d[i] = [i];
+    }
+    for (let j = 0; j <= n; j++) {
+      d[0][j] = j;
+    }
+    for (let j = 1; j <= n; j++) {
+      for (let i = 1; i <= m; i++) {
+        if (s[i - 1] === t[j - 1]) {
+          d[i][j] = d[i - 1][j - 1];
+        } else {
+          d[i][j] = Math.min(d[i - 1][j], d[i][j - 1], d[i - 1][j - 1]) + 1;
+        }
+      }
+    }
+    return d[m][n];
+  }
 
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+  
     const form1Answer = form1Data.name1.trim();
     const form2Answer = form2Data.name2.trim();
-
-    // if (answer1.includes(form1Answer.toLowerCase())) {
-    if (answer1.includes(form1Answer.toLowerCase())) {
-
-
-      setAnswersCorrect(answersCorrect + 1);
-      console.log('Answer are correct.');
-      // console.log('quiz.teams', quiz.teams );
-      const index1 = answer1.indexOf(form1Answer.toLowerCase());
-      // const index2 = answer.indexOf(form2Answer);
-      let newAnswer = answer1.filter((item, index) => index !== index1);
-      console.log('newAnswer', newAnswer);
-      // on refait un tableau dans lequel on a enlevé la bonne réponse
-      setAnswer1(newAnswer);
-      // ici on récupère le bon joueur que l'on va chercher à ajouter dans le rendu
-
-      let correctPlayer;
-      for (let i = 0; i < quiz.players.length; i++) {
-        if (quiz.players[i].name.toLowerCase() === form1Answer.toLowerCase())
-        // && (quiz.players[i].team === quiz.teams[0].name || quiz.players[i].team === quiz.teams[1].name))
-        {
-          correctPlayer = quiz.players[i];
-          break;
+  
+    let answer1Correct = false;
+    let answer2Correct = false;
+  
+    for (let i = 0; i < answer1.length; i++) {
+      const correctAnswer = answer1[i].toLowerCase();
+      if (checkAnswer(form1Answer.toLowerCase(), correctAnswer)) {
+        answer1Correct = true;
+  
+        setAnswersCorrect(answersCorrect + 1);
+  
+        const index1 = answer1.indexOf(correctAnswer);
+  
+        let newAnswer = answer1.filter((item, index) => index !== index1);
+  
+        setAnswer1(newAnswer);
+  
+        let correctPlayer;
+        for (let i = 0; i < quiz.players.length; i++) {
+          if (quiz.players[i].name.toLowerCase() === correctAnswer) {
+            correctPlayer = quiz.players[i];
+            break;
+          }
         }
-      }
-      // console.log('correctPlayer', correctPlayer);
-      // on ajoute le joueur dans le rendu 
-      let h3s = document.querySelectorAll('h3');
-      let positionElem;
-      for (let i = 0; i < h3s.length; i++) {
-        if (h3s[i].textContent === correctPlayer.position) {
-          positionElem = h3s[i];
-          break;
+  
+        let h3s = document.querySelectorAll('h3');
+        let positionElem;
+        for (let i = 0; i < h3s.length; i++) {
+          if (h3s[i].textContent === correctPlayer.position) {
+            positionElem = h3s[i];
+            break;
+          }
         }
-      }
-      let playerElement = document.createElement('p');
-      playerElement.textContent = correctPlayer.name;
-      positionElem.parentNode.insertBefore(playerElement, positionElem.nextSibling);
-      // on récupère l'input
-      const input = event.target.elements['name1'];
-      // on change le style
-      input.style.backgroundColor = 'green';
-      input.style.transform = 'scale(1.05)';
-      // on attend 200ms et on remet à 0
-      setTimeout(() => {
-        input.style.backgroundColor = '';
-        input.style.transform = '';
-        setForm1Data({ name1: '' });
-        event.target.reset();
-      }, 200);
-    }
-    else if (answer2.includes(form2Answer.toLowerCase())) {
-      setAnswersCorrect(answersCorrect + 1);
-      console.log('Answer are correct.');
-      // console.log('quiz.teams', quiz.teams );
-      const index2 = answer2.indexOf(form2Answer);
-      // const index2 = answer.indexOf(form2Answer);
-      let newAnswer = answer2.filter((item, index) => index !== index2);
-      console.log('newAnswer', newAnswer);
-      setAnswer2(newAnswer);
-      // ici on récupère le bon joueur que l'on va chercher à ajouter dans le rendu
-
-      let correctPlayer;
-      for (let i = 0; i < quiz.players.length; i++) {
-        if (quiz.players[i].name.toLowerCase() === form2Answer.toLowerCase())
-        // && (quiz.players[i].team === quiz.teams[0].name || quiz.players[i].team === quiz.teams[1].name))
-        {
-          correctPlayer = quiz.players[i];
-          break;
-        }
-      }
-      // console.log('correctPlayer', correctPlayer);
-      // on ajoute le joueur dans le rendu 
-      let h4s = document.querySelectorAll('h4');
-      let positionElem;
-      for (let i = 0; i < h4s.length; i++) {
-        if (h4s[i].textContent === correctPlayer.position) {
-          positionElem = h4s[i];
-          break;
-        }
-      }
-      let playerElement = document.createElement('p');
-      playerElement.textContent = correctPlayer.name;
-      positionElem.parentNode.insertBefore(playerElement, positionElem.nextSibling);
-      // on récupère l'input
-      const input = event.target.elements['name2'];
-      // on change le style
-      input.style.backgroundColor = 'green';
-      input.style.transform = 'scale(1.05)';
-      // on attend 200ms et on remet à 0
-      setTimeout(() => {
-        input.style.backgroundColor = '';
-        input.style.transform = '';
-        setForm2Data({ name2: '' });
-        event.target.reset();
-      }, 200);
-    }
-    else {
-      console.log('Answer are incorrect.');
-      if (event.target.elements['name1']) {
+        let playerElement = document.createElement('p');
+        playerElement.textContent = correctPlayer.name;
+        positionElem.parentNode.insertBefore(playerElement, positionElem.nextSibling);
+  
+        const input = event.target.elements['name1'];
+  
+        input.style.backgroundColor = 'green';
+        input.style.transform = 'scale(1.05)';
+  
+        setTimeout(() => {
+          input.style.backgroundColor = '';
+          input.style.transform = '';
+          setForm1Data({ name1: '' });
+          event.target.reset();
+        }, 200);
+      } else if (answer1Correct ===  false ){
+        if (event.target.elements['name1']){
         const input = event.target.elements['name1'];
         input.style.backgroundColor = 'red';
         input.style.transform = 'scale(0.9)';
@@ -199,7 +151,55 @@ export default function Quiz({ quiz }) {
           setForm1Data({ name1: '' });
           event.target.reset();
         }, 200);
-      } else if (event.target.elements['name2']) {
+      }}
+    }
+  
+    for (let i = 0; i < answer2.length; i++) {
+      const correctAnswer = answer2[i].toLowerCase();
+      if (checkAnswer(form2Answer.toLowerCase(), correctAnswer)) {
+        answer2Correct = true;
+  
+        setAnswersCorrect(answersCorrect + 1);
+  
+        const index2 = answer2.indexOf(correctAnswer);
+  
+        let newAnswer = answer2.filter((item, index) => index !== index2);
+  
+        setAnswer2(newAnswer);
+  
+        let correctPlayer;
+        for (let i = 0; i < quiz.players.length; i++) {
+          if (quiz.players[i].name.toLowerCase() === correctAnswer) {
+            correctPlayer = quiz.players[i];
+            break;
+          }
+        }
+  
+        let h4s = document.querySelectorAll('h4');
+        let positionElem;
+        for (let i = 0; i < h4s.length; i++) {
+          if (h4s[i].textContent === correctPlayer.position) {
+            positionElem = h4s[i];
+            break;
+          }
+        }
+        let playerElement = document.createElement('p');
+        playerElement.textContent = correctPlayer.name;
+        positionElem.parentNode.insertBefore(playerElement, positionElem.nextSibling);
+  
+        const input = event.target.elements['name2'];
+  
+        input.style.backgroundColor = 'green';
+        input.style.transform = 'scale(1.05)';
+  
+        setTimeout(() => {
+          input.style.backgroundColor = '';
+          input.style.transform = '';
+          setForm2Data({ name2: '' });
+          event.target.reset();
+        }, 200);
+      } else if (answer2Correct ===  false ){
+        if (event.target.elements['name2']){
         const input = event.target.elements['name2'];
         input.style.backgroundColor = 'red';
         input.style.transform = 'scale(0.9)';
@@ -209,10 +209,10 @@ export default function Quiz({ quiz }) {
           setForm2Data({ name2: '' });
           event.target.reset();
         }, 200);
-      }
-
+      }}
     }
-  };
+    }
+      
 
   const handleForm1Change = (event) => {
     setForm1Data({ name1: event.target.value });
@@ -231,7 +231,7 @@ export default function Quiz({ quiz }) {
         if (quiz.players[i].name.toLowerCase() == player.toLowerCase()) {
           // on ajoute le joueur dans le rendu
           const correctPlayer = quiz.players[i];
-          
+
           let h3s = document.querySelectorAll("h3");
           let positionElem;
           for (let j = 0; j < h3s.length; j++) {
@@ -256,7 +256,7 @@ export default function Quiz({ quiz }) {
         if (quiz.players[i].name.toLowerCase() == player.toLowerCase()) {
           // on ajoute le joueur dans le rendu
           const correctPlayer = quiz.players[i];
-          
+
           let h4s = document.querySelectorAll("h4");
           let positionElem;
           for (let j = 0; j < h4s.length; j++) {
@@ -275,11 +275,73 @@ export default function Quiz({ quiz }) {
         }
       }
     });
+    addResult()
+    addQuiz()
+    console.log('ca va');
   };
   const handleTimerEnd = () => {
     setGiveUp(true)
+    addResult()
+    addQuiz()
+  }
+  // fonction qui appelle une route de post un nouveau score, cette fonction est appelé si
+  // handleClickOnGiveUp ou handleTimerEnd ou answersCorrect == 22
+
+  const addResult = async () => {
+    const id = Cookies.get('id')
+    const jwt = Cookies.get('jwt')
+    try {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}`);
+      // console.log('resulta', res);
+      const currentResult = res.data.result;
+      const responseData = await axios.put(
+        `${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}`,
+        {
+          result: currentResult + answersCorrect,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${jwt}`
+          },
+        }
+      );
+      console.log('responseDataAddResult', responseData);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
+  // fonction qui va ajouter un quiz à l'user quand ce quiz a été fait dans le but qu'un user ne puisse pas
+  // faire deux fois le même quiz
+  const router = useRouter();
+  const addQuiz = async () => {
+    const { id: quizId } = router.query;
+    const userId = Cookies.get('id')
+    const jwt = Cookies.get('jwt')
+    const userName = Cookies.get('username')
+   
+    try {
+      const res = await axios.put(`${process.env.NEXT_PUBLIC_STRAPI_URL}/quizzes/${quizId}`, {
+        data: {
+          users_permissions_users: [{ id: userId, name: userName }],
+        },
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          // 'Authorization': `Bearer ${jwt}`
+        },
+      });
+      console.log('resultaAddQuiz', res);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  if (answersCorrect == 22) {
+    addResult()
+    addQuiz()
+  }
   return (
     <div>
       <Head>

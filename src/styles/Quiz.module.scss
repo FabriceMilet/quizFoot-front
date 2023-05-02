@@ -32,7 +32,9 @@
         &__text {
             text-align: center;
         }
-
+        & Link{
+            width: 35%;
+        }
         &__button {
             color: vars.$green;
             height: 2.5rem;
@@ -44,7 +46,7 @@
             cursor: pointer;
             border: none;
             transition: 0.3s;
-            width: 35%;
+            
 
 
             &:hover {
@@ -161,7 +163,9 @@
                 border-bottom: 2px solid vars.$green-light;
             }
         }
-
+        &Announcement{
+            margin-top: 3rem;
+        }
         &__position {
             padding-top: 1rem;
 

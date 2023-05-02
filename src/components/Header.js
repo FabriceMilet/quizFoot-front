@@ -12,8 +12,8 @@ export default function Header({isLoggedIn}) {
         unsetToken()   
     }
     const jwt = Cookies.get('jwt')
-    console.log('vérifin jwt', jwt);
-console.log('isLoggedIn', isLoggedIn);
+   //  console.log('vérifin jwt', jwt);
+    //console.log('isLoggedIn', isLoggedIn);
     return (
         <div className={styles.container}>
             <div className={styles.containerLogo}>
