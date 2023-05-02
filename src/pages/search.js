@@ -57,9 +57,9 @@ if (userId){
             {quizzesNotDone?.map((quiz) => (
               <li key={quiz.id}>
                 - {quiz.title} : {quiz.description}
-                <button className={styles.containerButton}>
-                  <Link href={`/quiz/${quiz.id}`}>Go</Link>
-                </button>
+                
+                  <Link href={`/quiz/${quiz.id}`}><button className={styles.containerButton}>Go</button></Link>
+                
               </li>
             ))}
           </ul>

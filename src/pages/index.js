@@ -19,12 +19,12 @@ export async function getServerSideProps() {
 }
 
 export default function Home({ quizzes }) {
- 
+
   const router = useRouter();
 
   // on choisi au hasard un id parmi le tableau d'id et on renvoie vers ce quiz
   const handleClickRandomAll = () => {
-      // on récupère un tableau avec les id de tous les quiz
+    // on récupère un tableau avec les id de tous les quiz
     const quizzesIdArray = quizzes.map(quiz => quiz.id);
     const randomQuizIndex = Math.floor(Math.random() * quizzesIdArray.length);
     const randomQuizId = quizzesIdArray[randomQuizIndex];
@@ -85,11 +85,11 @@ export default function Home({ quizzes }) {
             <div className={styles.containerCard__bottom}>
               <div className={styles.containerCard__choice}>
                 Tu peux choisir ton match
-                <button>
+                
                   <Link href="/search/selections-nationales">
-                    Ici
+                  <button> Ici</button>
                   </Link>
-                </button>
+                
               </div>
               <span>ou</span>
               <div className={styles.containerCard__choice}>
@@ -104,9 +104,9 @@ export default function Home({ quizzes }) {
           <div className={styles.containerCard}>
             <h3>Ligue 1</h3>
             <div className={styles.containerCard__bottom}>
-              <div className={styles.containerCard__choice}>Tu peux choisir ton match <button><Link href="/search/ligue-1">
-                Ici
-              </Link></button> </div>
+              <div className={styles.containerCard__choice}>Tu peux choisir ton match <Link href="/search/ligue-1">
+                <button> Ici</button>
+              </Link> </div>
               <span>ou</span>
               <div className={styles.containerCard__choice}>Lancer un quiz au hasard <button onClick={handleClickRandomLigue1}>Là</button></div>
 
@@ -115,9 +115,9 @@ export default function Home({ quizzes }) {
           <div className={styles.containerCard}>
             <h3>Ligue des champions</h3>
             <div className={styles.containerCard__bottom}>
-              <div className={styles.containerCard__choice}>Tu peux choisir ton match <button><Link href="/search/ligue-des-champions">
-                Ici
-              </Link></button> </div>
+              <div className={styles.containerCard__choice}>Tu peux choisir ton match <Link href="/search/ligue-des-champions">
+                <button> Ici</button>
+              </Link> </div>
               <span>ou</span>
               <div className={styles.containerCard__choice}>Lancer un quiz au hasard <button onClick={handleClickRandomChampions}>Là</button></div>
 
@@ -126,9 +126,9 @@ export default function Home({ quizzes }) {
           <div className={styles.containerCard}>
             <h3>Championnats étrangers</h3>
             <div className={styles.containerCard__bottom}>
-              <div className={styles.containerCard__choice}>Tu peux choisir ton match <button><Link href="/search/championnats-etrangers">
-                Ici
-              </Link></button> </div>
+              <div className={styles.containerCard__choice}>Tu peux choisir ton match <Link href="/search/championnats-etrangers">
+                <button>Ici</button>
+              </Link> </div>
               <span>ou</span>
               <div className={styles.containerCard__choice}>Lancer un quiz au hasard<button onClick={handleClickRandomForreign}>Là</button></div>
 

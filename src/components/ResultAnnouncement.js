@@ -25,7 +25,7 @@ function ResultAnnouncement({answersCorrect}) {
     return (
       <div className={styles.containerResultAnnouncement}>
         <div className={styles.containerResultAnnouncement__text}>{resultText}</div>
-        <button className={styles.containerResultAnnouncement__button}><Link href='/'>Rejouer</Link></button>
+        <Link href='/'><button className={styles.containerResultAnnouncement__button}>Rejouer</button></Link>
       </div>
     );
   }

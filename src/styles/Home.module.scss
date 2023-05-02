@@ -1,7 +1,6 @@
 @use "../styles/vars";
 
 .container{
-    // background-color: vars.$white;
     padding: 10.5rem 3rem 0;
     height: 100vh;
     color: rgb(210, 210, 219);
@@ -82,7 +81,7 @@
             justify-content: space-around;
             font-size: 1.2rem;
         }
-        & button {
+        & Link {
             width: 20%;
         }
         & span{
