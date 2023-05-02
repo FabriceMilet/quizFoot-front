@@ -1,4 +1,42 @@
 @use "../styles/vars";
+
 .container {
     padding: 10.5rem 3rem 0;
+    color: vars.$white;
+    text-align: center;
+    width: 80%;
+    margin: auto;
+    & h1 {
+margin-bottom: 1rem;
+    }
+    &Info{
+        margin-bottom: 1rem;
+    }
+    &Form{
+        display: flex;
+        flex-direction: column;
+        width: 50%;
+        margin: auto;
+    }
+    & button{
+        color: vars.$green;
+        height: 2.5rem;
+        font-size: 1.2rem;
+        background-color: vars.$lightblue;
+        text-shadow: 0.9px .9px .6px vars.$blue;
+        border-radius: 10px;
+        padding: 0.2rem 1.5rem 0.2rem 1.5rem;
+        cursor: pointer;
+        border: none;
+        transition: 0.3s;
+        &:hover {
+            animation: pulse 1s;
+            color: transparent;
+            box-shadow: 0 0 0 2rem transparent;
+            background-color: vars.$lightblue-light;
+          }
+    }
 }
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 vars.$blue-light; }
+  }
