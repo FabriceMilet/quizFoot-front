@@ -9,7 +9,7 @@ export default function Layout({ children }) {
 
     useEffect(() => {
         
-        console.log('jwt', jwt);
+       // console.log('jwt', jwt);
         if (jwt){
             setIsLoggedIn(true);
         }else{
