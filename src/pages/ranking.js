@@ -2,32 +2,6 @@ import Head from 'next/head'
 import styles from '../styles/Ranking.module.scss'
 import axios from 'axios';
 
-// // je récupère les users
-// export async function getServerSideProps() {
-//   try {
-//     const res = await axios(`http://localhost:1337/api/users`);
-//     const data = res.data;
-//     console.log('datasss', data);
-//     return {
-//       props: { users: data },
-//     }
-//   }
-//   catch (err) {
-//     console.error(err)
-//   }
-// }
-// // je récupère les quiz
-// export async function getServerSideProps() {
-//   try{
-//   const res = await axios(`http://localhost:1337/api/quizzes-with-all-info`);
-//   const data = res.data;
-//   return {
-//     props: { quizzes: data },
-//   }}
-//   catch(err){
-//     console.error(err)
-//   }
-// }
 // je récupère les quiz et les users
 export async function getServerSideProps() {
   try {
@@ -89,7 +63,7 @@ export default function Ranking({ users, quizzes }) {
       </Head>
       <main className={styles.container}>
         <div className={styles.containerHalf}>
-          <h2>Classement par points</h2>
+          <h2>Classement par points au cumul des quiz</h2>
           <ul>
             {sortedUsers?.map((user, index) => (
               <li key={user.id}>

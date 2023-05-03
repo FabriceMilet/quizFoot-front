@@ -1,3 +1,94 @@
+@use "../styles/vars";
+
 .container {
-    padding: 10.5rem 3rem 0;
+    padding: 12.5rem 3rem 0;
+    color: vars.$white;
+    text-align: center;
+    width: 80%;
+    margin: auto;
+    font-size: 1.2rem;
+
+    & h1 {
+        margin-bottom: .5rem;
+        color: vars.$white-darker;
+        text-shadow: 2px 1px 2px vars.$green;
+        text-transform: uppercase;
+    }
+    &Mail{
+        margin-bottom: 4rem;
+    }
+    &Info {
+        margin-bottom: 1rem;
+    }
+    &Shadow{
+        text-shadow: .7px .2px .7px vars.$green;
+    }
+    & button {
+        color: vars.$green;
+        height: 2.5rem;
+        font-size: 1.2rem;
+        background-color: vars.$lightblue;
+        text-shadow: 0.9px .9px .6px vars.$blue;
+        border-radius: 10px;
+        padding: 0.2rem 1rem 0.2rem 1rem;
+        cursor: pointer;
+        border: none;
+        transition: 0.3s;
+        
+        &:hover {
+            animation: pulse 1s;
+            color: transparent;
+            box-shadow: 0 0 0 2rem transparent;
+            background-color: vars.$lightblue-light;
+        }
+    }
+    &Form {
+        display: flex;
+        // flex-direction: column;
+        // width: 50%;
+        align-items: baseline;
+        justify-content: center;
+        // margin: auto;
+
+        & input {
+            margin-top: 0.5rem;
+            margin-left: .5rem;
+            background-color: vars.$green-light;
+            border: none;
+            border-radius: 5px;
+            padding: 0.4rem;
+            width: 14rem;
+
+            &:focus {
+                background-color: vars.$green;
+            }
+        }
+
+        & button {
+            width: 12rem;
+            margin-top: .5rem;
+            margin-left: .5rem;
+            // padding: 1rem;
+        }
+    }
+    &Ranking{
+        margin-top: 4rem;
+        &2{
+            margin-top: .5rem;
+            & button {
+                margin-left: .5rem;
+            }
+        }
+        & span{
+            font-size: 1.3rem ;
+            text-shadow: .7px .2px .7px vars.$green;
+        }
+    }
+
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 vars.$blue-light;
+    }
 }
