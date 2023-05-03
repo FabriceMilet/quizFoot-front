@@ -67,7 +67,7 @@ export default function Ranking({ users, quizzes }) {
           <ul>
             {sortedUsers?.map((user, index) => (
               <li key={user.id}>
-                {index + 1} - {user.username}: {user.result} {user.result == 1 ? 'point' : 'points'}
+                {index + 1} - {user.username} : {user.result} {user.result == 1 || user.result == 0 ? 'point' : 'points'}
               </li>
             ))}
           </ul>
@@ -80,7 +80,7 @@ export default function Ranking({ users, quizzes }) {
               const displayPercentage = Number.isInteger(percentage) ? percentage.toFixed(0) : percentage.toFixed(2);
               return (
                 <li key={user.id}>
-                  {index + 1} - {user.username}: {displayPercentage} %
+                  {index + 1} - {user.username} : {displayPercentage !== 'NaN' ? displayPercentage : 0} %
                 </li>
               );
             })}
