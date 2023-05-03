@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react'
 import { setToken } from '@/lib/auth';
 import axios from 'axios';
+import Link from 'next/link';
 
 export default function Login() {
   const router = useRouter();
@@ -40,6 +41,7 @@ export default function Login() {
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
   };
+
   return (
     <div>
       <Head>
@@ -78,7 +80,7 @@ export default function Login() {
               required
             />
           </div>
-
+          <Link href="/forgottenPassword"><p>Mot de passe oublié ?</p></Link>
 
           <button
             type="submit"

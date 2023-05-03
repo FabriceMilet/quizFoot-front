@@ -3,6 +3,7 @@ import Head from 'next/head'
 import styles from '../styles/Search.module.scss'
 import Link from 'next/link';
 import Cookies from 'js-cookie';
+import { FaMailBulk } from "react-icons/fa";
 import { useEffect, useState } from "react";
 
 export async function getServerSideProps() {
@@ -37,6 +38,10 @@ if (userId){
      setNoMoreQuiz(true);
   }
 }, [quizzesNotDone]);
+
+const handleClick = () => {
+  window.location.href = `mailto:fabrice.milet.dev@gmail.com`;
+}
  
   return (
     <div>
@@ -50,17 +55,14 @@ if (userId){
         <h1>Choisis un match parmi tous nos quiz</h1>
         {noMoreQuiz ? (
           <div className={styles.containerAnnonce}>
-            Tu as fait tous les quiz, contacte le créateur du site pour lui dire d'en créer d'autres
+            Tu as fait tous les quiz, contacte le créateur du site pour lui dire d'en créer d'autres <button onClick={handleClick}><FaMailBulk/></button>
           </div>
         ) : (
           <ul>
             {quizzesNotDone?.map((quiz) => (
-              <li key={quiz.id}>
-                - {quiz.title} : {quiz.description}
-                
-                  <Link href={`/quiz/${quiz.id}`}><button className={styles.containerButton}>Go</button></Link>
-                
-              </li>
+              <Link href={`/quiz/${quiz.id}`}><li key={quiz.id}>
+                - <span> {quiz.title} : {quiz.description}</span>
+              </li></Link>
             ))}
           </ul>
         )}

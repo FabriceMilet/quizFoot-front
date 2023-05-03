@@ -76,19 +76,20 @@ const Profile = ({ user }) => {
       </Head>
       <main className={styles.container}>
         <h1>Profil de {user.username}</h1>
-       
+        <p className={styles.containerMail}>Email : {user.email}</p>
         <div className={styles.containerInfo}>
-          <p>Email : {user.email}</p>
-          <p>Tu veux modifier ton pseudo ?</p>
+          
+          <p className={styles.containerShadow}>Tu veux modifier ton pseudo ?</p>
           <form className={styles.containerForm} onSubmit={handleSubmit}>
             
             
-            <label htmlFor="newUsername">Nouveau pseudo</label>
+            <label htmlFor="newUsername">Nouveau pseudo : </label>
             <input
               type="text"
               id="newUsername"
               name="newUsername"
               value={newUsername}
+              placeholder='Nouveau pseudo'
               onChange={(e) => setNewUsername(e.target.value)}
             />
          
@@ -97,8 +98,8 @@ const Profile = ({ user }) => {
         </div>
 
         <div className={styles.containerRanking}>
-          <p>Nombre de bonnes réponses au cumul de tous tes quiz : {user.result}</p>
-          <p>Va voir ton classement par rapport aux autres joueurs <Link href="/ranking"><button>Go</button></Link></p>
+          <p>Nombre de bonnes réponses au cumul de tous tes quiz : <span>{user.result}</span></p>
+          <p className={styles.containerRanking2}>Va voir ton classement par rapport aux autres joueurs <Link href="/ranking"><button>ici</button></Link></p>
         </div>
 
       </main>

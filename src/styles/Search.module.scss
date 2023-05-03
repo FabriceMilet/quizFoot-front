@@ -17,13 +17,20 @@
     & li {
         margin-bottom: 1rem;
         font-size: 1.2rem;
+        cursor: pointer;
+        & span{
+            transition: 0.3s;
+            padding: 0 1rem 0 1rem;
+        }
+        & span:hover {
+            animation: pulse 1s;
+            box-shadow: 0 0 1rem 2rem transparent;
+        }
     }
-    &Annonce{
-        color: vars.$white;
-        text-align: center;
-        font-size: 1.2rem;
-    }
-    & button{
+    & button {
+        display: block;
+        margin: auto;
+        margin-top: 1rem;
         color: vars.$green;
         height: 2.5rem;
         font-size: 1.2rem;
@@ -31,19 +38,26 @@
         text-shadow: 0.9px .9px .6px vars.$blue;
         border-radius: 10px;
         padding: 0.2rem 1.5rem 0.2rem 1.5rem;
-        margin-left: 1rem;
         cursor: pointer;
         border: none;
         transition: 0.3s;
+
         &:hover {
             animation: pulse 1s;
-            color: transparent;
-            box-shadow: 0 0 0 2rem transparent;
             background-color: vars.$lightblue-light;
-          }
+            box-shadow: 0 0 0 2rem transparent;
+        }
+    }
+    &Annonce{
+        color: vars.$white;
+        text-align: center;
+        font-size: 1.2rem;
     }
 }
 
 @keyframes pulse {
-    0% { box-shadow: 0 0 0 0 vars.$blue-light; }
+    0% { box-shadow: 0 0 0 0 vars.$blue-light;
+        background-color: vars.$blue-light;
+    }
+    
   }

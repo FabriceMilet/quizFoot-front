@@ -53,17 +53,14 @@ if (userId){
     <h1>Choisis entre ces matchs de {quizzes[0].category.name}</h1>
     {noMoreQuiz ? (
           <div className={styles.containerAnnonce}>
-            Tu as fait tous les quiz de cette catégorie, essaie une autre !
+            Tu as fait tous les quiz de cette catégorie, essaie une autre ! <Link href='/'><button>Rejouer</button></Link>
           </div>
         ) : (
           <ul>
             {quizzesNotDone?.map((quiz) => (
-              <li key={quiz.id}>
-                - {quiz.title} : {quiz.description}
-                
-                  <Link href={`/quiz/${quiz.id}`}><button className={styles.containerButton}>Go</button></Link>
-                
-              </li>
+              <Link href={`/quiz/${quiz.id}`}><li key={quiz.id}>
+                - <span>{quiz.title} : {quiz.description}</span>
+              </li></Link>
             ))}
           </ul>
         )}
