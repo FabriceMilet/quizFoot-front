@@ -345,8 +345,8 @@ export default function Quiz({ quiz }) {
   }
 
   // fonction qui gère l'apparitioin d'un feu d'artifice si le joueur a toutes les bonnes réponses
-  useEffect(() => {
-    if (fireworksRef.current) {
+  function handleQuizCompleted() {
+    if (answersCorrect === 22 && fireworksRef.current) {
       const fireworks = new Fireworks(fireworksRef.current, {
         maxRockets: 6,
         rocketSpawnInterval: 150,
@@ -357,13 +357,13 @@ export default function Quiz({ quiz }) {
       });
       fireworks.start();
     }
-  }, [fireworksRef]);
+  }
 
-  // gestion si joueur a toutes les bonnes réponses
+  
   if (answersCorrect == 22) {
     addResult()
     addQuiz()
-    setAllCorrect(true)
+    handleQuizCompleted()
   }
   return (
     <div>
@@ -397,9 +397,8 @@ export default function Quiz({ quiz }) {
               </div>
             </div>
           </div>}
-
           
-          {allCorrect ? <div className={styles.containerResult} ref={fireworksRef}></div > : <div className={styles.containerResult}>
+          {answersCorrect == 22 ? <div className={styles.containerResult} ref={fireworksRef}></div > : <div className={styles.containerResult}>
             <div className={styles.containerResult__team}>
               <h2>{quiz.teams[0].name}</h2>
               <div className={styles.containerResult__position}>
