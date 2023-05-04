@@ -19,9 +19,10 @@ export async function getServerSideProps() {
 }
 
 export default function Search({quizzes}) {
-console.log('quizzes', quizzes)
+// console.log('quizzes', quizzes)
 const userId = Cookies.get('id')
 const [noMoreQuiz, setNoMoreQuiz] = useState(false)
+const [searchTerm, setSearchTerm] = useState('');
 
 let quizzesNotDone
 if (userId){
@@ -32,7 +33,7 @@ if (userId){
   }else{
     quizzesNotDone = quizzes
   }
- console.log('quizzesNotDone', quizzesNotDone);
+ // console.log('quizzesNotDone', quizzesNotDone);
  useEffect(() => {
   if(quizzesNotDone && quizzesNotDone.length === 0) {
      setNoMoreQuiz(true);
@@ -42,6 +43,14 @@ if (userId){
 const handleClick = () => {
   window.location.href = `mailto:fabrice.milet.dev@gmail.com`;
 }
+
+const handleSearch = (event) => {
+  setSearchTerm(event.target.value);
+}
+// on filtre les quiz dispo selon la recherche de l'utilisateur
+const filteredQuizzes = quizzesNotDone.filter((quiz) => {
+  return quiz.title.toLowerCase().includes(searchTerm.toLowerCase());
+});
  
   return (
     <div>
@@ -53,14 +62,17 @@ const handleClick = () => {
       </Head>
       <main className={styles.container}>
         <h1>Choisis un match parmi tous nos quiz</h1>
+        <div className={styles.containerSearch}>
+          <input type="text" placeholder="Rechercher un match" value={searchTerm} onChange={handleSearch} />
+        </div>
         {noMoreQuiz ? (
           <div className={styles.containerAnnonce}>
             Tu as fait tous les quiz, contacte le créateur du site pour lui dire d'en créer d'autres <button onClick={handleClick}><FaMailBulk/></button>
           </div>
         ) : (
           <ul>
-            {quizzesNotDone?.map((quiz) => (
-              <Link href={`/quiz/${quiz.id}`}><li key={quiz.id}>
+            {filteredQuizzes?.map((quiz) => (
+              <Link href={`/quiz/${quiz.id}`} key={quiz.id}><li >
                 - <span> {quiz.title} : {quiz.description}</span>
               </li></Link>
             ))}

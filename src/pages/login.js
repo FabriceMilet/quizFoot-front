@@ -14,8 +14,8 @@ export default function Login() {
   });
 
   const handleSubmit = async (e) => {
-    console.log('userData.email', userData.email);
-    console.log('userData.password', userData.password);
+    // console.log('userData.email', userData.email);
+    // console.log('userData.password', userData.password);
     e.preventDefault();
     try {
       const responseData = await axios.post(
@@ -30,7 +30,7 @@ export default function Login() {
           },
         }
       );
-      console.log('responseData.data', responseData.data);
+      // console.log('responseData.data', responseData.data);
       setToken(responseData.data);
       router.push('/');
     } catch (error) {

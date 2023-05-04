@@ -9,6 +9,7 @@
   */
   * {
     margin: 0;
+    caret-color: transparent;
   }
   /*
     3. Allow percentage-based heights in the application
@@ -37,6 +38,9 @@
   */
   input, button, textarea, select {
     font: inherit;
+  }
+  input{
+    caret-color: rgb(85, 84, 84);
   }
   /*
     8. Avoid text overflows

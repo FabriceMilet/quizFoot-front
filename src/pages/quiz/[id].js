@@ -13,13 +13,9 @@ import Fireworks from 'fireworks-js';
 export async function getServerSideProps({ params }) {
   try {
     const { id } = params;
-    // console.log('id', id);
     const res = await axios(`http://localhost:1337/api/quiz-with-all-info/${id}`);
-    // const res = await axios(`http://localhost:1337/api/quizzes-with-all-info`);
     const data = res.data;
-    // console.log('datasss', data);
-    //  const filteredData = data?.filter((quiz) => quiz.id == id);
-    //  console.log('filteredDat', filteredData);
+  
     return {
       props: { quiz: data },
     }
@@ -30,7 +26,7 @@ export async function getServerSideProps({ params }) {
 }
 
 export default function Quiz({ quiz }) {
-  // console.log('quiz',quiz);
+  const router = useRouter();
   // on initialise les tableaux de bonnes réponses (un tableau par éauipe avec le nom des 11 joueurs)
   const [answer1, setAnswer1] = useState(
     quiz.players
@@ -48,7 +44,7 @@ export default function Quiz({ quiz }) {
   const [form2Data, setForm2Data] = useState({ name2: '' });
   const [answersCorrect, setAnswersCorrect] = useState(0);
   const [giveUp, setGiveUp] = useState(false)
-  const [allCorrect, setAllCorrect] = useState(false)
+  // const [allCorrect, setAllCorrect] = useState(false)
   const fireworksRef = useRef(null);
 
   // on met en place une fonction de vérification de réponse en utilisant l'algorithme de Levenshtein
@@ -283,8 +279,8 @@ export default function Quiz({ quiz }) {
     });
     addResult()
     addQuiz()
-    console.log('ca va');
   };
+
   const handleTimerEnd = () => {
     setGiveUp(true)
     addResult()
@@ -297,22 +293,25 @@ export default function Quiz({ quiz }) {
     const id = Cookies.get('id')
     const jwt = Cookies.get('jwt')
     try {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}`);
-      // console.log('resulta', res);
-      const currentResult = res.data.result;
-      const responseData = await axios.put(
-        `${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}`,
-        {
-          result: currentResult + answersCorrect,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${jwt}`
+      if(jwt){
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}`);
+        // console.log('resulta', res);
+        const currentResult = res.data.result;
+        const responseData = await axios.put(
+          `${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}`,
+          {
+            result: currentResult + answersCorrect,
           },
-        }
-      );
-      console.log('responseDataAddResult', responseData);
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${jwt}`
+            },
+          }
+        );
+        // console.log('responseDataAddResult', responseData);
+      }
+  
     } catch (error) {
       console.error(error);
     }
@@ -320,25 +319,27 @@ export default function Quiz({ quiz }) {
 
   // fonction qui va ajouter un quiz à l'user quand ce quiz a été fait dans le but qu'un user ne puisse pas
   // faire deux fois le même quiz
-  const router = useRouter();
+  
   const addQuiz = async () => {
     const { id: quizId } = router.query;
     const userId = Cookies.get('id')
-    const jwt = Cookies.get('jwt')
+    // const jwt = Cookies.get('jwt')
     const userName = Cookies.get('username')
 
     try {
-      const res = await axios.put(`${process.env.NEXT_PUBLIC_STRAPI_URL}/quizzes/${quizId}`, {
-        data: {
-          users_permissions_users: [{ id: userId, name: userName }],
-        },
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-          // 'Authorization': `Bearer ${jwt}`
-        },
-      });
-      console.log('resultaAddQuiz', res);
+      if (userId){
+        const res = await axios.put(`${process.env.NEXT_PUBLIC_STRAPI_URL}/quizzes/${quizId}`, {
+          data: {
+            users_permissions_users: [{ id: userId, name: userName }],
+          },
+        }, {
+          headers: {
+            'Content-Type': 'application/json',
+            // 'Authorization': `Bearer ${jwt}`
+          },
+        });
+        // console.log('resultaAddQuiz', res);
+      }
     } catch (error) {
       console.log(error);
     }
