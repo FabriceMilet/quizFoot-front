@@ -15,7 +15,7 @@ export async function getServerSideProps({ params }) {
     const { id } = params;
     const res = await axios(`http://localhost:1337/api/quiz-with-all-info/${id}`);
     const data = res.data;
-  
+
     return {
       props: { quiz: data },
     }
@@ -101,15 +101,12 @@ export default function Quiz({ quiz }) {
       if (checkAnswer(form1Answer.toLowerCase(), correctAnswer)) {
         answer1Correct = true;
 
-        setAnswersCorrect(answersCorrect + 1);
-
         const index1 = answer1.indexOf(correctAnswer);
 
         let newAnswer = answer1.filter((item, index) => index !== index1);
 
-        setAnswer1(newAnswer);
-
         let correctPlayer;
+
         for (let i = 0; i < quiz.players.length; i++) {
           if (quiz.players[i].name.toLowerCase() === correctAnswer) {
             correctPlayer = quiz.players[i];
@@ -140,6 +137,11 @@ export default function Quiz({ quiz }) {
           setForm1Data({ name1: '' });
           event.target.reset();
         }, 200);
+
+        setAnswersCorrect(answersCorrect + 1);
+        setAnswer1(newAnswer);
+        break
+
       } else if (answer1Correct === false) {
         if (event.target.elements['name1']) {
           const input = event.target.elements['name1'];
@@ -160,14 +162,12 @@ export default function Quiz({ quiz }) {
       if (checkAnswer(form2Answer.toLowerCase(), correctAnswer)) {
         answer2Correct = true;
 
-        setAnswersCorrect(answersCorrect + 1);
+        
 
         const index2 = answer2.indexOf(correctAnswer);
 
         let newAnswer = answer2.filter((item, index) => index !== index2);
-
-        setAnswer2(newAnswer);
-
+        
         let correctPlayer;
         for (let i = 0; i < quiz.players.length; i++) {
           if (quiz.players[i].name.toLowerCase() === correctAnswer) {
@@ -193,12 +193,18 @@ export default function Quiz({ quiz }) {
         input.style.backgroundColor = 'green';
         input.style.transform = 'scale(1.05)';
 
+
         setTimeout(() => {
           input.style.backgroundColor = '';
           input.style.transform = '';
           setForm2Data({ name2: '' });
           event.target.reset();
         }, 200);
+
+        setAnswersCorrect(answersCorrect + 1);
+        setAnswer2(newAnswer);
+        break
+
       } else if (answer2Correct === false) {
         if (event.target.elements['name2']) {
           const input = event.target.elements['name2'];
@@ -293,7 +299,7 @@ export default function Quiz({ quiz }) {
     const id = Cookies.get('id')
     const jwt = Cookies.get('jwt')
     try {
-      if(jwt){
+      if (jwt) {
         const res = await axios.get(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}`);
         // console.log('resulta', res);
         const currentResult = res.data.result;
@@ -311,7 +317,7 @@ export default function Quiz({ quiz }) {
         );
         // console.log('responseDataAddResult', responseData);
       }
-  
+
     } catch (error) {
       console.error(error);
     }
@@ -319,7 +325,7 @@ export default function Quiz({ quiz }) {
 
   // fonction qui va ajouter un quiz à l'user quand ce quiz a été fait dans le but qu'un user ne puisse pas
   // faire deux fois le même quiz
-  
+
   const addQuiz = async () => {
     const { id: quizId } = router.query;
     const userId = Cookies.get('id')
@@ -327,7 +333,7 @@ export default function Quiz({ quiz }) {
     const userName = Cookies.get('username')
 
     try {
-      if (userId){
+      if (userId) {
         const res = await axios.put(`${process.env.NEXT_PUBLIC_STRAPI_URL}/quizzes/${quizId}`, {
           data: {
             users_permissions_users: [{ id: userId, name: userName }],
@@ -360,7 +366,7 @@ export default function Quiz({ quiz }) {
     }
   }
 
-  
+
   if (answersCorrect == 22) {
     addResult()
     addQuiz()
@@ -398,7 +404,7 @@ export default function Quiz({ quiz }) {
               </div>
             </div>
           </div>}
-          
+
           {answersCorrect == 22 ? <div className={styles.containerResult} ref={fireworksRef}></div > : <div className={styles.containerResult}>
             <div className={styles.containerResult__team}>
               <h2>{quiz.teams[0].name}</h2>
@@ -426,7 +432,7 @@ export default function Quiz({ quiz }) {
               </div>
             </div>
           </div>}
-          
+
         </div>
       </main>
     </div>
