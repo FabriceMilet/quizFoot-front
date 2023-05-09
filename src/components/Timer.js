@@ -32,7 +32,7 @@ function Timer({onTimerEnd}) {
 
   return (
     <div className={styles.containerPlayground__timer}>
-    <FaRegClock size={45}/>
+    <FaRegClock className={styles.containerPlayground__logo} size={45}/>
     <div>
      <div>Temps restant :</div>
      <div>{minutes} minutes {seconds} </div> 
