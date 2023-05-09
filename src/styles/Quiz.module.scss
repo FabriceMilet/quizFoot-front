@@ -57,7 +57,7 @@
             }
         }
     }
-
+  
     &Playground {
         width: 50%;
 
@@ -152,6 +152,7 @@
         display: flex;
         padding-left: 2rem;
         text-align: center;
+        overflow-x: hidden;
 
         &__team {
             width: 50%;

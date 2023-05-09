@@ -3,21 +3,19 @@ import styles from '../../styles/Quiz.module.scss'
 import axios from 'axios';
 import Timer from '../../components/Timer'
 import Count from '../../components/Count'
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ResultAnnouncement from '@/components/ResultAnnouncement';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
+import Fireworks from 'fireworks-js';
+
 
 export async function getServerSideProps({ params }) {
   try {
     const { id } = params;
-    // console.log('id', id);
     const res = await axios(`http://localhost:1337/api/quiz-with-all-info/${id}`);
-    // const res = await axios(`http://localhost:1337/api/quizzes-with-all-info`);
     const data = res.data;
-    // console.log('datasss', data);
-    //  const filteredData = data?.filter((quiz) => quiz.id == id);
-    //  console.log('filteredDat', filteredData);
+
     return {
       props: { quiz: data },
     }
@@ -28,7 +26,7 @@ export async function getServerSideProps({ params }) {
 }
 
 export default function Quiz({ quiz }) {
-  // console.log('quiz',quiz);
+  const router = useRouter();
   // on initialise les tableaux de bonnes réponses (un tableau par éauipe avec le nom des 11 joueurs)
   const [answer1, setAnswer1] = useState(
     quiz.players
@@ -46,6 +44,8 @@ export default function Quiz({ quiz }) {
   const [form2Data, setForm2Data] = useState({ name2: '' });
   const [answersCorrect, setAnswersCorrect] = useState(0);
   const [giveUp, setGiveUp] = useState(false)
+  // const [allCorrect, setAllCorrect] = useState(false)
+  const fireworksRef = useRef(null);
 
   // on met en place une fonction de vérification de réponse en utilisant l'algorithme de Levenshtein
   // qui est une méthode utilisée pour mesurer la différence entre deux chaînes de caractères 
@@ -89,34 +89,31 @@ export default function Quiz({ quiz }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-  
+
     const form1Answer = form1Data.name1.trim();
     const form2Answer = form2Data.name2.trim();
-  
+
     let answer1Correct = false;
     let answer2Correct = false;
-  
+
     for (let i = 0; i < answer1.length; i++) {
       const correctAnswer = answer1[i].toLowerCase();
       if (checkAnswer(form1Answer.toLowerCase(), correctAnswer)) {
         answer1Correct = true;
-  
-        setAnswersCorrect(answersCorrect + 1);
-  
+
         const index1 = answer1.indexOf(correctAnswer);
-  
+
         let newAnswer = answer1.filter((item, index) => index !== index1);
-  
-        setAnswer1(newAnswer);
-  
+
         let correctPlayer;
+
         for (let i = 0; i < quiz.players.length; i++) {
           if (quiz.players[i].name.toLowerCase() === correctAnswer) {
             correctPlayer = quiz.players[i];
             break;
           }
         }
-  
+
         let h3s = document.querySelectorAll('h3');
         let positionElem;
         for (let i = 0; i < h3s.length; i++) {
@@ -128,45 +125,49 @@ export default function Quiz({ quiz }) {
         let playerElement = document.createElement('p');
         playerElement.textContent = correctPlayer.name;
         positionElem.parentNode.insertBefore(playerElement, positionElem.nextSibling);
-  
+
         const input = event.target.elements['name1'];
-  
+
         input.style.backgroundColor = 'green';
         input.style.transform = 'scale(1.05)';
-  
+
         setTimeout(() => {
           input.style.backgroundColor = '';
           input.style.transform = '';
           setForm1Data({ name1: '' });
           event.target.reset();
         }, 200);
-      } else if (answer1Correct ===  false ){
-        if (event.target.elements['name1']){
-        const input = event.target.elements['name1'];
-        input.style.backgroundColor = 'red';
-        input.style.transform = 'scale(0.9)';
-        setTimeout(() => {
-          input.style.backgroundColor = '';
-          input.style.transform = '';
-          setForm1Data({ name1: '' });
-          event.target.reset();
-        }, 200);
-      }}
+
+        setAnswersCorrect(answersCorrect + 1);
+        setAnswer1(newAnswer);
+        break
+
+      } else if (answer1Correct === false) {
+        if (event.target.elements['name1']) {
+          const input = event.target.elements['name1'];
+          input.style.backgroundColor = 'red';
+          input.style.transform = 'scale(0.9)';
+          setTimeout(() => {
+            input.style.backgroundColor = '';
+            input.style.transform = '';
+            setForm1Data({ name1: '' });
+            event.target.reset();
+          }, 200);
+        }
+      }
     }
-  
+
     for (let i = 0; i < answer2.length; i++) {
       const correctAnswer = answer2[i].toLowerCase();
       if (checkAnswer(form2Answer.toLowerCase(), correctAnswer)) {
         answer2Correct = true;
-  
-        setAnswersCorrect(answersCorrect + 1);
-  
+
+        
+
         const index2 = answer2.indexOf(correctAnswer);
-  
+
         let newAnswer = answer2.filter((item, index) => index !== index2);
-  
-        setAnswer2(newAnswer);
-  
+        
         let correctPlayer;
         for (let i = 0; i < quiz.players.length; i++) {
           if (quiz.players[i].name.toLowerCase() === correctAnswer) {
@@ -174,7 +175,7 @@ export default function Quiz({ quiz }) {
             break;
           }
         }
-  
+
         let h4s = document.querySelectorAll('h4');
         let positionElem;
         for (let i = 0; i < h4s.length; i++) {
@@ -186,33 +187,40 @@ export default function Quiz({ quiz }) {
         let playerElement = document.createElement('p');
         playerElement.textContent = correctPlayer.name;
         positionElem.parentNode.insertBefore(playerElement, positionElem.nextSibling);
-  
+
         const input = event.target.elements['name2'];
-  
+
         input.style.backgroundColor = 'green';
         input.style.transform = 'scale(1.05)';
-  
+
+
         setTimeout(() => {
           input.style.backgroundColor = '';
           input.style.transform = '';
           setForm2Data({ name2: '' });
           event.target.reset();
         }, 200);
-      } else if (answer2Correct ===  false ){
-        if (event.target.elements['name2']){
-        const input = event.target.elements['name2'];
-        input.style.backgroundColor = 'red';
-        input.style.transform = 'scale(0.9)';
-        setTimeout(() => {
-          input.style.backgroundColor = '';
-          input.style.transform = '';
-          setForm2Data({ name2: '' });
-          event.target.reset();
-        }, 200);
-      }}
+
+        setAnswersCorrect(answersCorrect + 1);
+        setAnswer2(newAnswer);
+        break
+
+      } else if (answer2Correct === false) {
+        if (event.target.elements['name2']) {
+          const input = event.target.elements['name2'];
+          input.style.backgroundColor = 'red';
+          input.style.transform = 'scale(0.9)';
+          setTimeout(() => {
+            input.style.backgroundColor = '';
+            input.style.transform = '';
+            setForm2Data({ name2: '' });
+            event.target.reset();
+          }, 200);
+        }
+      }
     }
-    }
-      
+  }
+
 
   const handleForm1Change = (event) => {
     setForm1Data({ name1: event.target.value });
@@ -277,8 +285,8 @@ export default function Quiz({ quiz }) {
     });
     addResult()
     addQuiz()
-    console.log('ca va');
   };
+
   const handleTimerEnd = () => {
     setGiveUp(true)
     addResult()
@@ -291,22 +299,25 @@ export default function Quiz({ quiz }) {
     const id = Cookies.get('id')
     const jwt = Cookies.get('jwt')
     try {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}`);
-      // console.log('resulta', res);
-      const currentResult = res.data.result;
-      const responseData = await axios.put(
-        `${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}`,
-        {
-          result: currentResult + answersCorrect,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${jwt}`
+      if (jwt) {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}`);
+        // console.log('resulta', res);
+        const currentResult = res.data.result;
+        const responseData = await axios.put(
+          `${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}`,
+          {
+            result: currentResult + answersCorrect,
           },
-        }
-      );
-      console.log('responseDataAddResult', responseData);
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${jwt}`
+            },
+          }
+        );
+        // console.log('responseDataAddResult', responseData);
+      }
+
     } catch (error) {
       console.error(error);
     }
@@ -314,33 +325,52 @@ export default function Quiz({ quiz }) {
 
   // fonction qui va ajouter un quiz à l'user quand ce quiz a été fait dans le but qu'un user ne puisse pas
   // faire deux fois le même quiz
-  const router = useRouter();
+
   const addQuiz = async () => {
     const { id: quizId } = router.query;
     const userId = Cookies.get('id')
-    const jwt = Cookies.get('jwt')
+    // const jwt = Cookies.get('jwt')
     const userName = Cookies.get('username')
-   
+
     try {
-      const res = await axios.put(`${process.env.NEXT_PUBLIC_STRAPI_URL}/quizzes/${quizId}`, {
-        data: {
-          users_permissions_users: [{ id: userId, name: userName }],
-        },
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-          // 'Authorization': `Bearer ${jwt}`
-        },
-      });
-      console.log('resultaAddQuiz', res);
+      if (userId) {
+        const res = await axios.put(`${process.env.NEXT_PUBLIC_STRAPI_URL}/quizzes/${quizId}`, {
+          data: {
+            users_permissions_users: [{ id: userId, name: userName }],
+          },
+        }, {
+          headers: {
+            'Content-Type': 'application/json',
+            // 'Authorization': `Bearer ${jwt}`
+          },
+        });
+        // console.log('resultaAddQuiz', res);
+      }
     } catch (error) {
       console.log(error);
     }
   }
 
+  // fonction qui gère l'apparitioin d'un feu d'artifice si le joueur a toutes les bonnes réponses
+  function handleQuizCompleted() {
+    if (answersCorrect === 22 && fireworksRef.current) {
+      const fireworks = new Fireworks(fireworksRef.current, {
+        maxRockets: 6,
+        rocketSpawnInterval: 150,
+        numParticles: 100,
+        explosionMinHeight: 0.2,
+        explosionMaxHeight: 0.9,
+        explosionChance: 0.08,
+      });
+      fireworks.start();
+    }
+  }
+
+
   if (answersCorrect == 22) {
     addResult()
     addQuiz()
+    handleQuizCompleted()
   }
   return (
     <div>
@@ -351,10 +381,10 @@ export default function Quiz({ quiz }) {
         <link rel="icon" href="/images/tlc.png" />
       </Head>
 
-      <main className={styles.container}>
+      <main className={styles.container} >
         <h1 className={styles.containerTitle}>{quiz.title}</h1>
         <h2 className={styles.containerSubtitle}>{quiz.description}</h2>
-        <div className={styles.containerGame}>
+        <div className={styles.containerGame} >
           {answersCorrect == 22 || giveUp ? <ResultAnnouncement className={styles.containerPlayground__Announcement} answersCorrect={answersCorrect} /> : <div className={styles.containerPlayground}>
             <div className={styles.containerPlayground__forms}>
               <form className={styles.containerPlayground__form} onSubmit={handleSubmit}>
@@ -375,7 +405,7 @@ export default function Quiz({ quiz }) {
             </div>
           </div>}
 
-          <div className={styles.containerResult}>
+          {answersCorrect == 22 ? <div className={styles.containerResult} ref={fireworksRef}></div > : <div className={styles.containerResult}>
             <div className={styles.containerResult__team}>
               <h2>{quiz.teams[0].name}</h2>
               <div className={styles.containerResult__position}>
@@ -401,7 +431,8 @@ export default function Quiz({ quiz }) {
                 <h4>Attaquant</h4>
               </div>
             </div>
-          </div>
+          </div>}
+
         </div>
       </main>
     </div>

@@ -5,17 +5,75 @@ import { useState } from 'react'
 import { useRouter } from 'next/router';
 import { setToken } from '../lib/auth';
 
-export default function Signup({ }) {
+// je récupère les les users afin de personnalisé mon message d'erreur si pseudo ou email déjà existant
+export async function getServerSideProps() {
+  try {
+    const usersRes = await axios(`http://localhost:1337/api/users`);
+    const usersData = usersRes.data;
+
+    return {
+      props: {
+        users: usersData,
+      }
+    }
+  } catch (error) {
+    console.error(error);
+    return {
+      props: {
+        users: [] 
+      }
+    }
+  }
+}
+
+export default function Signup({users}) {
   const router = useRouter();
   const [userData, setUserData] = useState({
     username: '',
     email: '',
     password: '',
+    passwordConfirmation: ''
   });
+const [error, setError] = useState(false)
+const [errorText, setErrorText] = useState('')
+// console.log('users', users);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
+
+    let emailExists = false;
+    for (let i = 0; i < users.length; i++) {
+      if (users[i].email === userData.email) {
+        emailExists = true;
+        break;
+      }
+    }
+
+    let pseudoExists = false;
+    for (let i = 0; i < users.length; i++) {
+      if (users[i].username === userData.username) {
+        pseudoExists = true;
+        break;
+      }
+    }
+
+    if (emailExists) {
+      setError(true)
+      setErrorText("Cet email est déjà utilisé, veuillez en choisir un autre ou vous connecter")
+    } else if (pseudoExists) {
+      setError(true)
+      setErrorText("Ce pseudo est déjà utilisé, veuillez en choisir un autre")
+    }
+    else if (userData.password.length < 6){
+      setError(true)
+      setErrorText('Le mot de passe doit contenir au moins 6 caractères')
+    }
+    else if (userData.password !== userData.passwordConfirmation){
+      setError(true)
+      setErrorText('Le mot de passe et la confirmation ne correspondent pas')
+    }
+    else {
+      try {
       const responseData = await axios.post(
         `${process.env.NEXT_PUBLIC_STRAPI_URL}/auth/local/register`,
         {
@@ -29,12 +87,13 @@ export default function Signup({ }) {
           },
         }
       );
-      console.log('responseData.data', responseData.data);
+      // console.log('responseData.data', responseData.data);
       setToken(responseData.data);
-      router.push('/profile');
+      router.push('/');
     } catch (error) {
       console.log(error.response);
-    }
+    }}
+
   };
 
   const handleChange = (e) => {
@@ -53,6 +112,7 @@ export default function Signup({ }) {
       </Head>
       <main className={styles.container}>
         <h1 className={styles.containerTitle}>Inscription</h1>
+        {error ? <h2 className={styles.containerErrorTitle}>{errorText}</h2> : <></>}
         <form
           onSubmit={handleSubmit}
           className={styles.containerForm}
@@ -92,6 +152,19 @@ export default function Signup({ }) {
               name="password"
               onChange={(e) => handleChange(e)}
               placeholder="mot de passe"
+              autoComplete="off"
+              required
+            />
+          </div>
+          <div className={styles.containerForm__case}>
+            <label htmlFor="password">
+              Confirmation de mot de passe
+            </label>
+            <input
+              type="password"
+              name="passwordConfirmation"
+              onChange={(e) => handleChange(e)}
+              placeholder="confirmation"
               autoComplete="off"
               required
             />

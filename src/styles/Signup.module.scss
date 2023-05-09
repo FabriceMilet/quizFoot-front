@@ -8,7 +8,13 @@
         font-size: 3rem;
         color: vars.$white-darker;
         text-shadow: 2px 1px 2px vars.$green;
-        margin-bottom: 2rem;
+        margin-bottom: 1rem;
+    }
+    &ErrorTitle{
+        text-align: center;
+        color: rgb(224, 9, 9);
+        margin-bottom: 1rem;
+        text-shadow: 2px 0.5px 1px black;
     }
     &Form{
         display: flex;

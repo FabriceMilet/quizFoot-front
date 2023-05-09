@@ -12,11 +12,20 @@
     justify-content: space-between;
     font-family: 'goodtime';
 
+    &Menu {
+        height: 100vh;
+    }
+
     &Logo {
         width: 7rem;
+
         &:hover {
             cursor: pointer;
         }
+    }
+
+    &Burger {
+        display: none;
     }
 
     &Title {
@@ -24,6 +33,7 @@
         font-size: 3.2rem;
         color: vars.$white-darker;
         text-shadow: 2px 1px 2px vars.$green;
+        text-align: center;
     }
 
     &Navigation {
@@ -32,13 +42,12 @@
         border-radius: 10px;
         width: 10rem;
         padding-bottom: 0.8rem;
-      
+
 
         &__logos {
             display: flex;
             align-items: center;
             gap: 2rem;
-            // justify-content: space-around;
         }
 
         &__link {
@@ -57,11 +66,12 @@
                 height: 26px;
                 transition: all .3s ease;
             }
+
             &:hover::before {
                 width: 85%;
                 height: 100%;
                 background: rgba(vars.$green, .5);
-              }
+            }
         }
 
         & button {
@@ -71,10 +81,64 @@
             padding-top: 0.4rem;
             font-size: 0.9rem;
             position: relative;
-           
+
             &:hover {
                 cursor: pointer;
             }
         }
     }
+    &NavigationMobile {
+     padding: 3rem;
+
+        &__logos {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+           
+        }
+
+        & button {
+            border: none;
+            background-color: transparent;
+            color: vars.$white-darker;
+            padding-top: 2rem;
+            font-size: 2rem;
+            text-align: left;
+        }
+    }
+
 }
+
+/* Pour les écrans jusqu'à 767px de largeur */
+@media only screen and (max-width: 767px) {
+    .container {
+        padding: 0 1.5rem 0 1.5rem;
+
+        &Burger {
+            display: block;
+            background-color: transparent;
+            color: vars.$white;
+            border: none;
+            font-size: 4rem;
+        }
+
+        &Navigation {
+            display: none;
+        }
+
+        &Logo {
+            display: none;
+        }
+
+        &Title {
+            font-size: 2rem;
+        }
+    }
+
+}
+
+/* Pour les écrans entre 768px et 1023px de largeur */
+@media only screen and (min-width: 768px) and (max-width: 1023px) {}
+
+/* Pour les écrans à partir de 1024px de largeur */
+@media only screen and (min-width: 1024px) {}
