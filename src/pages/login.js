@@ -12,6 +12,7 @@ export default function Login() {
     email: '',
     password: '',
   });
+  const [error, setError] = useState(false)
 
   const handleSubmit = async (e) => {
     // console.log('userData.email', userData.email);
@@ -34,7 +35,11 @@ export default function Login() {
       setToken(responseData.data);
       router.push('/');
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      if (error.response.data.error.message = 'Invalid identifier or password'){
+        setError(true)
+      }
+
     }
   };
   const handleChange = (e) => {
@@ -52,6 +57,7 @@ export default function Login() {
       </Head>
       <main className={styles.container}>
         <h1 className={styles.containerTitle}>Se connecter</h1>
+        {error ? <h2 className={styles.containerErrorTitle}>L'email ou le mot de passe est incorrect</h2> : <></>}
         <form onSubmit={handleSubmit} className={styles.containerForm}>
 
           <div className={styles.containerForm__case}>

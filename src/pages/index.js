@@ -75,8 +75,8 @@ export default function Home({ quizzes }) {
       <main className={styles.container}>
         <div className={styles.containerTop}>
           <div className={styles.containerTop__title} >
-            <h1 className={styles.containerTitle} >Lance un match au hasard parmi tous nos quiz</h1>
-            <button className={styles.containerButton} onClick={handleClickRandomAll}>Let's Go</button></div>
+            <h1  >Lance un match au hasard parmi tous nos quiz</h1>
+            <button className={styles.containerButton} onClick={handleClickRandomAll}>Jouer</button></div>
           <h2 className={styles.containerTitle}><div>Ou choisis parmi les thèmes ci-dessous</div> <FaArrowAltCircleDown className={styles.containerArrow} /></h2>
         </div>
         <div className={styles.containerCards}>

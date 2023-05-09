@@ -32,6 +32,7 @@ export default function Signup({users}) {
     username: '',
     email: '',
     password: '',
+    passwordConfirmation: ''
   });
 const [error, setError] = useState(false)
 const [errorText, setErrorText] = useState('')
@@ -56,7 +57,6 @@ const [errorText, setErrorText] = useState('')
       }
     }
 
-
     if (emailExists) {
       setError(true)
       setErrorText("Cet email est déjà utilisé, veuillez en choisir un autre ou vous connecter")
@@ -67,6 +67,10 @@ const [errorText, setErrorText] = useState('')
     else if (userData.password.length < 6){
       setError(true)
       setErrorText('Le mot de passe doit contenir au moins 6 caractères')
+    }
+    else if (userData.password !== userData.passwordConfirmation){
+      setError(true)
+      setErrorText('Le mot de passe et la confirmation ne correspondent pas')
     }
     else {
       try {
@@ -148,6 +152,19 @@ const [errorText, setErrorText] = useState('')
               name="password"
               onChange={(e) => handleChange(e)}
               placeholder="mot de passe"
+              autoComplete="off"
+              required
+            />
+          </div>
+          <div className={styles.containerForm__case}>
+            <label htmlFor="password">
+              Confirmation de mot de passe
+            </label>
+            <input
+              type="password"
+              name="passwordConfirmation"
+              onChange={(e) => handleChange(e)}
+              placeholder="confirmation"
               autoComplete="off"
               required
             />

@@ -68,7 +68,7 @@
             width: 12rem;
             margin-top: .5rem;
             margin-left: .5rem;
-            // padding: 1rem;
+            
         }
     }
     &Ranking{
@@ -80,8 +80,18 @@
             }
         }
         & span{
-            font-size: 1.3rem ;
+            font-size: 2rem ;
             text-shadow: .7px .2px .7px vars.$green;
+        }
+    }
+    &Delete{
+        margin-top: 4rem;
+        padding-bottom: 2rem;
+        & button {
+            margin-left: .5rem;
+        }
+        & button:hover{
+            color: inherit;
         }
     }
 
