@@ -38,3 +38,30 @@
         font-size: 1.5rem;
     }
 }
+
+  /* Pour les écrans jusqu'à 767px de largeur */
+  @media only screen and (max-width: 767px) {
+    .container {
+        padding: 12.5rem 2rem 0;
+        flex-direction: column;
+       
+        &Half{
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+        & h2{
+            font-size: 1.1rem;
+        }
+        & ul li:first-child {
+            font-size: 1.3rem;
+         
+        }
+    
+        ul li:nth-child(2) {
+            font-size: 1.1rem;
+        }
+    
+        ul li:nth-child(3) {
+            font-size: 0.9rem;
+        }
+    }}

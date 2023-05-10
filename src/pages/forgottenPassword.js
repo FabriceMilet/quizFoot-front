@@ -30,7 +30,7 @@ export default function forgottenPassword() {
           console.log('responseData.data', responseData.data);
           setMailSend(true)
         } catch (error) {
-          console.log(error);
+          console.error(error);
         }
       };
       const handleChange = (e) => {

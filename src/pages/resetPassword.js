@@ -34,7 +34,7 @@ export default function resetPassword() {
             console.log('responseData.data', responseData.data);
             Router.push('/login');
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     };
     const handleChange = (e) => {

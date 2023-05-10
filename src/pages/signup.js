@@ -91,7 +91,7 @@ const [errorText, setErrorText] = useState('')
       setToken(responseData.data);
       router.push('/');
     } catch (error) {
-      console.log(error.response);
+      console.error(error);
     }}
 
   };

@@ -347,7 +347,7 @@ export default function Quiz({ quiz }) {
         // console.log('resultaAddQuiz', res);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 
