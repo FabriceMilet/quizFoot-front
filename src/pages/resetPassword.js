@@ -68,7 +68,6 @@ export default function resetPassword() {
                         />
                     </div>
 
-                    
                     <div className={styles.containerForm__case}>
                         <label htmlFor="passwordConfirmation">
                             Confirmation du mot de passe : 

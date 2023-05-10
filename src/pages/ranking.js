@@ -5,10 +5,10 @@ import axios from 'axios';
 // je récupère les quiz et les users
 export async function getServerSideProps() {
   try {
-    const usersRes = await axios(`http://localhost:1337/api/users`);
+    const usersRes = await axios(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users`);
     const usersData = usersRes.data;
 
-    const quizzesRes = await axios(`http://localhost:1337/api/quizzes-with-all-info`);
+    const quizzesRes = await axios(`${process.env.NEXT_PUBLIC_STRAPI_URL}/quizzes-with-all-info`);
     const quizzesData = quizzesRes.data;
 
     return {
@@ -32,27 +32,26 @@ export async function getServerSideProps() {
 export default function Ranking({ users, quizzes }) {
   // je récupère les user qui ont fait les quiz 
   const userIds = quizzes.map((quiz) => quiz.users_permissions_users)
-  
+
   // je récupère un tableau ne comportant que les ids
   const flattenedIds = userIds.flatMap(users => users.map(user => user.id))
-  
-  // console.log('users', users);
+
   const filteredUsers = users.filter(user => user.result !== null);
-  
+
   const sortedUsers = filteredUsers.sort((a, b) => b.result - a.result);
-  //console.log('sortedUsers', sortedUsers);
+
   // mainteant je boucle sur filteredUsers pour savoir copmbien de quiz il a fait afin d'en sortir un pourcentage
   const countIds = filteredUsers.map(user => {
     const count = flattenedIds.filter(id => id === user.id).length;
     return { ...user, count };
   });
-  
+
   const sortedUsersbypercentage = countIds.sort((a, b) => {
     const percentageA = a.result / a.count;
     const percentageB = b.result / b.count;
     return percentageB - percentageA;
   });
-  
+
   return (
     <div>
       <Head>

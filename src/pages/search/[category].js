@@ -6,49 +6,48 @@ import Cookies from 'js-cookie';
 import { useEffect, useState } from "react";
 
 export async function getServerSideProps({ params }) {
-  try{
-  const { category } = params;
-  const res = await axios(`http://localhost:1337/api/quizzes-with-all-info`);
-  const data = res.data;
-  // TODO remplacer par quiz.category.slug === category && quiz.users-permissions.id !== Cookies.get('id')
-  const filteredData = data?.filter((quiz) => quiz.category.slug === category);
-  return {
-    props: { quizzes: filteredData },
-  }}
-  catch(err){
+  try {
+    const { category } = params;
+    const res = await axios(`${process.env.NEXT_PUBLIC_STRAPI_URL}/quizzes-with-all-info`);
+    const data = res.data;
+    const filteredData = data?.filter((quiz) => quiz.category.slug === category);
+    return {
+      props: { quizzes: filteredData },
+    }
+  }
+  catch (err) {
     console.error(err)
   }
 }
 
-export default function Search({quizzes}) {
-// console.log(quizzes)
-const userId = Cookies.get('id')
-const [noMoreQuiz, setNoMoreQuiz] = useState(false)
-const [searchTerm, setSearchTerm] = useState('');
+export default function Search({ quizzes }) {
 
-let quizzesNotDone
-if (userId){
-  quizzesNotDone = quizzes?.filter(quiz => {
-    // console.log('quiz', quiz);
-    return !quiz.users_permissions_users.some(user => user.id == userId);
-    } );
-  }else{
+  const userId = Cookies.get('id')
+  const [noMoreQuiz, setNoMoreQuiz] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('');
+
+  let quizzesNotDone
+  if (userId) {
+    quizzesNotDone = quizzes?.filter(quiz => {
+      return !quiz.users_permissions_users.some(user => user.id == userId);
+    });
+  } else {
     quizzesNotDone = quizzes
   }
- // console.log('quizzesNotDone', quizzesNotDone);
- useEffect(() => {
-  if(quizzesNotDone && quizzesNotDone.length === 0) {
-     setNoMoreQuiz(true);
-  }
-}, [quizzesNotDone]);
+  
+  useEffect(() => {
+    if (quizzesNotDone && quizzesNotDone.length === 0) {
+      setNoMoreQuiz(true);
+    }
+  }, [quizzesNotDone]);
 
-const handleSearch = (event) => {
-  setSearchTerm(event.target.value);
-}
-// on filtre les quiz dispo selon la recherche de l'utilisateur
-const filteredQuizzes = quizzesNotDone.filter((quiz) => {
-  return quiz.title.toLowerCase().includes(searchTerm.toLowerCase());
-});
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  }
+  // on filtre les quiz dispo selon la recherche de l'utilisateur
+  const filteredQuizzes = quizzesNotDone.filter((quiz) => {
+    return quiz.title.toLowerCase().includes(searchTerm.toLowerCase());
+  });
 
   return (
     <div>
@@ -58,12 +57,12 @@ const filteredQuizzes = quizzesNotDone.filter((quiz) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/images/tlc.png" />
       </Head>
-    <main className={styles.container}>
-    <h1>Choisis entre ces matchs de {quizzes[0].category.name}</h1>
-    <div className={styles.containerSearch}>
+      <main className={styles.container}>
+        <h1>Choisis entre ces matchs de {quizzes[0].category.name}</h1>
+        <div className={styles.containerSearch}>
           <input type="text" placeholder="Rechercher un match" value={searchTerm} onChange={handleSearch} />
         </div>
-    {noMoreQuiz ? (
+        {noMoreQuiz ? (
           <div className={styles.containerAnnonce}>
             Tu as fait tous les quiz de cette catégorie, essaie une autre ! <Link href='/'><button>Rejouer</button></Link>
           </div>
@@ -76,7 +75,7 @@ const filteredQuizzes = quizzesNotDone.filter((quiz) => {
             ))}
           </ul>
         )}
-    </main>
+      </main>
     </div>
   )
 }

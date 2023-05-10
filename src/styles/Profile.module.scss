@@ -44,11 +44,8 @@
     }
     &Form {
         display: flex;
-        // flex-direction: column;
-        // width: 50%;
         align-items: baseline;
         justify-content: center;
-        // margin: auto;
 
         & input {
             margin-top: 0.5rem;

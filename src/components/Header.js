@@ -27,50 +27,45 @@ export default function Header({ isLoggedIn }) {
     }
 
     return (<>
-        {showMenu ? <div className={showMenu ? styles.containerMenu : styles.container}><div > 
-        {isLoggedIn ?
-                    (
-                            <nav className={showMenu ? styles.containerNavigationMobile : styles.containerNavigation}>
-                                <button onClick={handleClose}>X Fermer</button>
-                                <div >
-                                <Link href='/'><button onClick={handleClickOnButton}>Accueil</button> </Link></div>
-                                <div >
-                                <Link href='/search'><button onClick={handleClickOnButton}> Chercher un quiz</button> </Link>
-                            </div>
-                            <div >
-                                <Link href='/profile'><button onClick={handleClickOnButton}> Page profile</button> </Link>
-                            </div>
-                                <div >
-                                    <Link href='/ranking'><button onClick={handleClickOnButton}>Classement</button> </Link></div>
-                                <div >
-                                    <button onClick={handleLogout}>Se déconnecter</button></div>
-                            </nav>
-                       
-                    )
-                    :
-                    (
-                        <nav className={showMenu ? styles.containerNavigationMobile : styles.containerNavigation}>
-                            <button onClick={handleClose}>X Fermer</button>
-                            <div >
-                                <Link href='/'><button onClick={handleClickOnButton}>Accueil</button> </Link></div>
-                            <div >
-                                <Link href='/search'><button onClick={handleClickOnButton}> Chercher un quiz</button> </Link>
-                            </div>
-                            <div >
-                                <Link href='/ranking'><button onClick={handleClickOnButton}>Classement</button> </Link></div>
-                            <div >
-                                <Link href='/signup'><button onClick={handleClickOnButton}>S'inscrire</button> </Link></div>
-                            <div >
-                                <Link href='/login'><button onClick={handleClickOnButton}>Connexion</button> </Link></div>
-                        </nav>
-                    
-                    )
-                }
-            
-            </div></div> :
+        {showMenu ? <div className={showMenu ? styles.containerMenu : styles.container}><div >
+            {isLoggedIn ?
+                (
+                    <nav className={showMenu ? styles.containerNavigationMobile : styles.containerNavigation}>
+                        <button onClick={handleClose}>X Fermer</button>
+                        <div >
+                            <Link href='/'><button onClick={handleClickOnButton}>Accueil</button> </Link></div>
+                        <div >
+                            <Link href='/search'><button onClick={handleClickOnButton}> Chercher un quiz</button> </Link>
+                        </div>
+                        <div >
+                            <Link href='/profile'><button onClick={handleClickOnButton}> Page profile</button> </Link>
+                        </div>
+                        <div >
+                            <Link href='/ranking'><button onClick={handleClickOnButton}>Classement</button> </Link></div>
+                        <div >
+                            <button onClick={handleLogout}>Se déconnecter</button></div>
+                    </nav>
+                )
+                :
+                (
+                    <nav className={showMenu ? styles.containerNavigationMobile : styles.containerNavigation}>
+                        <button onClick={handleClose}>X Fermer</button>
+                        <div >
+                            <Link href='/'><button onClick={handleClickOnButton}>Accueil</button> </Link></div>
+                        <div >
+                            <Link href='/search'><button onClick={handleClickOnButton}> Chercher un quiz</button> </Link>
+                        </div>
+                        <div >
+                            <Link href='/ranking'><button onClick={handleClickOnButton}>Classement</button> </Link></div>
+                        <div >
+                            <Link href='/signup'><button onClick={handleClickOnButton}>S'inscrire</button> </Link></div>
+                        <div >
+                            <Link href='/login'><button onClick={handleClickOnButton}>Connexion</button> </Link></div>
+                    </nav>
+                )
+            }
+        </div></div> :
             <div className={styles.container}>
-
-
                 <div className={styles.containerLogo}>
                     <Link href='/'><img src={tlc.src} alt="logo du site" /> </Link>
                 </div>
@@ -113,7 +108,6 @@ export default function Header({ isLoggedIn }) {
                     </>
                     )
                 }
-
             </div>}
     </>)
 }

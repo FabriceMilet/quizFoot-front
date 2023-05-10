@@ -29,5 +29,4 @@ function ResultAnnouncement({answersCorrect}) {
       </div>
     );
   }
-  
   export default ResultAnnouncement;

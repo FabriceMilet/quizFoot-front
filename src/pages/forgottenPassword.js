@@ -2,7 +2,6 @@ import { useState } from 'react';
 import styles from '../styles/forgottenPassword.module.scss'
 import Head from 'next/head'
 import axios from 'axios';
-import Router from 'next/router';
 
 export default function forgottenPassword() {
 

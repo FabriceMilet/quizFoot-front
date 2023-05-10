@@ -23,7 +23,7 @@ export async function getServerSideProps(context) {
       }
     }
 
-    const res = await axios(`http://localhost:1337/api/users/${userId}`);
+    const res = await axios(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${userId}`);
     const data = res.data;
 
     return {
@@ -44,7 +44,6 @@ const Profile = ({ user }) => {
   const router = useRouter();
   const [newUsername, setNewUsername] = useState("");
   const [openModal, setOpenModal] = useState(false)
- //  console.log('user', user);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
