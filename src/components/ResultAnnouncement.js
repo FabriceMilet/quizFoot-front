@@ -7,7 +7,7 @@ function ResultAnnouncement({answersCorrect}) {
   if (answersCorrect == 0) {
     resultText = `Tu n'as aucune bonne réponse, t'as déjà vu un match de foot ?`;
   } else if (answersCorrect == 1) {
-    resultText = `Tu as une seule bonne réponse, tu sais Zidane c'est pas juste une pub volvic .. `;
+    resultText = `Une seule bonne réponse, allez, essaie encore, ce sera difficile de faire pire`;
   } else if (answersCorrect > 0 && answersCorrect < 5) {
     resultText = `Tu as trouvé ${answersCorrect} joueurs, retourne voir tes vieilles cassettes 
     de foot en folie et reviens faire un meilleur score`;
