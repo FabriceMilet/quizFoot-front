@@ -5,7 +5,7 @@ import axios from 'axios';
 import Router from 'next/router';
 import queryString from 'query-string';
 
-export default function resetPassword() {
+export default function ResetPassword() {
 
     const [userData, setUserData] = useState({
         password: '',

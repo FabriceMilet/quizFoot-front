@@ -12,10 +12,10 @@ export default function FourOhFour() {
                 <link rel="icon" href="/images/tlc.png" />
             </Head>
             <main className={styles.container}>
-                <h1>404 - La page demandée n'existe pas</h1>
+                <h1>404 - La page demandée n&apos;existe pas</h1>
                 <Link href="/">
                     <button>
-                        Retourne à l'accueil
+                        Retourne à l&apos;accueil
                     </button>
                 </Link>
             </main>

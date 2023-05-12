@@ -55,7 +55,7 @@ export default function Login() {
       </Head>
       <main className={styles.container}>
         <h1 className={styles.containerTitle}>Se connecter</h1>
-        {error ? <h2 className={styles.containerErrorTitle}>L'email ou le mot de passe est incorrect</h2> : <></>}
+        {error ? <h2 className={styles.containerErrorTitle}>L&apos;email ou le mot de passe est incorrect</h2> : <></>}
         <form onSubmit={handleSubmit} className={styles.containerForm}>
 
           <div className={styles.containerForm__case}>

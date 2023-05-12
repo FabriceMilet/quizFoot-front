@@ -67,7 +67,7 @@ const filteredQuizzes = quizzesNotDone.filter((quiz) => {
         </div>
         {noMoreQuiz ? (
           <div className={styles.containerAnnonce}>
-            Tu as fait tous les quiz, contacte le créateur du site pour lui dire d'en créer d'autres <button onClick={handleClick}><FaMailBulk/></button>
+            Tu as fait tous les quiz, contacte le créateur du site pour lui dire d&apos;en créer d&apos;autres <button onClick={handleClick}><FaMailBulk/></button>
           </div>
         ) : (
           <ul>

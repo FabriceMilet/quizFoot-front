@@ -171,7 +171,7 @@ const [errorText, setErrorText] = useState('')
           <button
             type="submit"
           >
-            S'inscrire
+            S&apos;inscrire
           </button>
         </form>
       </main>

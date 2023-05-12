@@ -3,7 +3,7 @@ import styles from '../styles/forgottenPassword.module.scss'
 import Head from 'next/head'
 import axios from 'axios';
 
-export default function forgottenPassword() {
+export default function ForgottenPassword() {
 
     const [userData, setUserData] = useState({
         email: '',

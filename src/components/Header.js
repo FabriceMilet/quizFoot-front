@@ -58,7 +58,7 @@ export default function Header({ isLoggedIn }) {
                         <div >
                             <Link href='/ranking'><button onClick={handleClickOnButton}>Classement</button> </Link></div>
                         <div >
-                            <Link href='/signup'><button onClick={handleClickOnButton}>S'inscrire</button> </Link></div>
+                            <Link href='/signup'><button onClick={handleClickOnButton}>S&apos;inscrire</button> </Link></div>
                         <div >
                             <Link href='/login'><button onClick={handleClickOnButton}>Connexion</button> </Link></div>
                     </nav>
@@ -101,7 +101,7 @@ export default function Header({ isLoggedIn }) {
                             <div className={styles.containerNavigation__link}>
                                 <Link href='/ranking'><button>Classement</button> </Link></div>
                             <div className={styles.containerNavigation__link}>
-                                <Link href='/signup'><button>S'inscrire</button> </Link></div>
+                                <Link href='/signup'><button>S&apos;inscrire</button> </Link></div>
                             <div className={styles.containerNavigation__link}>
                                 <Link href='/login'><button>Connexion</button> </Link></div>
                         </nav>
