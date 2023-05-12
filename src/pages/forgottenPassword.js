@@ -2,7 +2,6 @@ import { useState } from 'react';
 import styles from '../styles/forgottenPassword.module.scss'
 import Head from 'next/head'
 import axios from 'axios';
-import Router from 'next/router';
 
 export default function forgottenPassword() {
 
@@ -30,7 +29,7 @@ export default function forgottenPassword() {
           console.log('responseData.data', responseData.data);
           setMailSend(true)
         } catch (error) {
-          console.log(error);
+          console.error(error);
         }
       };
       const handleChange = (e) => {

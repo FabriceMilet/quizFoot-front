@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { FaRegClock } from "react-icons/fa";
 import styles from '../styles/Quiz.module.scss'
 
-function Timer({onTimerEnd}) {
-    // temps initial en secondes
-  const [timeLeft, setTimeLeft] = useState(5 * 60); 
+function Timer({ onTimerEnd }) {
+  // temps initial en secondes
+  const [timeLeft, setTimeLeft] = useState(5 * 60);
   const [intervalId, setIntervalId] = useState(null);
 
   useEffect(() => {
@@ -32,11 +32,11 @@ function Timer({onTimerEnd}) {
 
   return (
     <div className={styles.containerPlayground__timer}>
-    <FaRegClock size={45}/>
-    <div>
-     <div>Temps restant :</div>
-     <div>{minutes} minutes {seconds} </div> 
-    </div>
+      <FaRegClock className={styles.containerPlayground__logo} size={45} />
+      <div>
+        <div>Temps restant :</div>
+        <div>{minutes} minutes {seconds} </div>
+      </div>
     </div>
   );
 }

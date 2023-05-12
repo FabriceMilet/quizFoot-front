@@ -8,8 +8,6 @@ export default function Layout({ children }) {
     const jwt = Cookies.get("jwt");
 
     useEffect(() => {
-        
-       // console.log('jwt', jwt);
         if (jwt){
             setIsLoggedIn(true);
         }else{

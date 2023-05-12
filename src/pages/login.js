@@ -15,8 +15,7 @@ export default function Login() {
   const [error, setError] = useState(false)
 
   const handleSubmit = async (e) => {
-    // console.log('userData.email', userData.email);
-    // console.log('userData.password', userData.password);
+
     e.preventDefault();
     try {
       const responseData = await axios.post(
@@ -31,12 +30,11 @@ export default function Login() {
           },
         }
       );
-      // console.log('responseData.data', responseData.data);
       setToken(responseData.data);
       router.push('/');
     } catch (error) {
       console.error(error);
-      if (error.response.data.error.message = 'Invalid identifier or password'){
+      if (error.response.data.error.message = 'Invalid identifier or password') {
         setError(true)
       }
 

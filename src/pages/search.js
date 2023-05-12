@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 
 export async function getServerSideProps() {
   try{
-  const res = await axios(`http://localhost:1337/api/quizzes-with-all-info`);
+  const res = await axios(`${process.env.NEXT_PUBLIC_STRAPI_URL}/quizzes-with-all-info`);
   const data = res.data;
   return {
     props: { quizzes: data },
@@ -19,7 +19,7 @@ export async function getServerSideProps() {
 }
 
 export default function Search({quizzes}) {
-// console.log('quizzes', quizzes)
+
 const userId = Cookies.get('id')
 const [noMoreQuiz, setNoMoreQuiz] = useState(false)
 const [searchTerm, setSearchTerm] = useState('');
@@ -27,13 +27,13 @@ const [searchTerm, setSearchTerm] = useState('');
 let quizzesNotDone
 if (userId){
   quizzesNotDone = quizzes?.filter(quiz => {
-    // console.log('quiz', quiz);
+
     return !quiz.users_permissions_users.some(user => user.id == userId);
     } );
   }else{
     quizzesNotDone = quizzes
   }
- // console.log('quizzesNotDone', quizzesNotDone);
+
  useEffect(() => {
   if(quizzesNotDone && quizzesNotDone.length === 0) {
      setNoMoreQuiz(true);

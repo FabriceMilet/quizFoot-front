@@ -13,7 +13,7 @@ import Fireworks from 'fireworks-js';
 export async function getServerSideProps({ params }) {
   try {
     const { id } = params;
-    const res = await axios(`http://localhost:1337/api/quiz-with-all-info/${id}`);
+    const res = await axios(`${process.env.NEXT_PUBLIC_STRAPI_URL}/quiz-with-all-info/${id}`);
     const data = res.data;
 
     return {
@@ -33,7 +33,6 @@ export default function Quiz({ quiz }) {
       ?.filter(player => player.teams.includes(quiz.teams[0].name))
       .map(player => player.name.toLowerCase())
   );
-  // console.log('answer1', answer1);
   const [answer2, setAnswer2] = useState(
     quiz.players
       ?.filter(player => player.teams.includes(quiz.teams[1].name))
@@ -44,7 +43,6 @@ export default function Quiz({ quiz }) {
   const [form2Data, setForm2Data] = useState({ name2: '' });
   const [answersCorrect, setAnswersCorrect] = useState(0);
   const [giveUp, setGiveUp] = useState(false)
-  // const [allCorrect, setAllCorrect] = useState(false)
   const fireworksRef = useRef(null);
 
   // on met en place une fonction de vérification de réponse en utilisant l'algorithme de Levenshtein
@@ -161,13 +159,10 @@ export default function Quiz({ quiz }) {
       const correctAnswer = answer2[i].toLowerCase();
       if (checkAnswer(form2Answer.toLowerCase(), correctAnswer)) {
         answer2Correct = true;
-
-        
-
         const index2 = answer2.indexOf(correctAnswer);
 
         let newAnswer = answer2.filter((item, index) => index !== index2);
-        
+
         let correctPlayer;
         for (let i = 0; i < quiz.players.length; i++) {
           if (quiz.players[i].name.toLowerCase() === correctAnswer) {
@@ -189,10 +184,8 @@ export default function Quiz({ quiz }) {
         positionElem.parentNode.insertBefore(playerElement, positionElem.nextSibling);
 
         const input = event.target.elements['name2'];
-
         input.style.backgroundColor = 'green';
         input.style.transform = 'scale(1.05)';
-
 
         setTimeout(() => {
           input.style.backgroundColor = '';
@@ -234,7 +227,6 @@ export default function Quiz({ quiz }) {
     setGiveUp(true);
     // ici, on va récupérer les players non trouvés et les ajouter en rouge au rendu
     answer1.forEach((player) => {
-      // console.log(player);
       for (let i = 0; i < quiz.players.length; i++) {
         if (quiz.players[i].name.toLowerCase() == player.toLowerCase()) {
           // on ajoute le joueur dans le rendu
@@ -259,7 +251,6 @@ export default function Quiz({ quiz }) {
       }
     });
     answer2.forEach((player) => {
-      // console.log(player);
       for (let i = 0; i < quiz.players.length; i++) {
         if (quiz.players[i].name.toLowerCase() == player.toLowerCase()) {
           // on ajoute le joueur dans le rendu
@@ -292,16 +283,15 @@ export default function Quiz({ quiz }) {
     addResult()
     addQuiz()
   }
+
   // fonction qui appelle une route de post un nouveau score, cette fonction est appelé si
   // handleClickOnGiveUp ou handleTimerEnd ou answersCorrect == 22
-
   const addResult = async () => {
     const id = Cookies.get('id')
     const jwt = Cookies.get('jwt')
     try {
       if (jwt) {
         const res = await axios.get(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}`);
-        // console.log('resulta', res);
         const currentResult = res.data.result;
         const responseData = await axios.put(
           `${process.env.NEXT_PUBLIC_STRAPI_URL}/users/${id}`,
@@ -315,9 +305,7 @@ export default function Quiz({ quiz }) {
             },
           }
         );
-        // console.log('responseDataAddResult', responseData);
       }
-
     } catch (error) {
       console.error(error);
     }
@@ -325,29 +313,25 @@ export default function Quiz({ quiz }) {
 
   // fonction qui va ajouter un quiz à l'user quand ce quiz a été fait dans le but qu'un user ne puisse pas
   // faire deux fois le même quiz
-
   const addQuiz = async () => {
     const { id: quizId } = router.query;
     const userId = Cookies.get('id')
-    // const jwt = Cookies.get('jwt')
     const userName = Cookies.get('username')
 
     try {
       if (userId) {
-        const res = await axios.put(`${process.env.NEXT_PUBLIC_STRAPI_URL}/quizzes/${quizId}`, {
+        await axios.put(`${process.env.NEXT_PUBLIC_STRAPI_URL}/quizzes/${quizId}`, {
           data: {
             users_permissions_users: [{ id: userId, name: userName }],
           },
         }, {
           headers: {
             'Content-Type': 'application/json',
-            // 'Authorization': `Bearer ${jwt}`
           },
         });
-        // console.log('resultaAddQuiz', res);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 

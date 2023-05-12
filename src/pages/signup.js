@@ -8,7 +8,7 @@ import { setToken } from '../lib/auth';
 // je récupère les les users afin de personnalisé mon message d'erreur si pseudo ou email déjà existant
 export async function getServerSideProps() {
   try {
-    const usersRes = await axios(`http://localhost:1337/api/users`);
+    const usersRes = await axios(`${process.env.NEXT_PUBLIC_STRAPI_URL}/users`);
     const usersData = usersRes.data;
 
     return {
@@ -36,7 +36,6 @@ export default function Signup({users}) {
   });
 const [error, setError] = useState(false)
 const [errorText, setErrorText] = useState('')
-// console.log('users', users);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -87,11 +86,11 @@ const [errorText, setErrorText] = useState('')
           },
         }
       );
-      // console.log('responseData.data', responseData.data);
+
       setToken(responseData.data);
       router.push('/');
     } catch (error) {
-      console.log(error.response);
+      console.error(error);
     }}
 
   };

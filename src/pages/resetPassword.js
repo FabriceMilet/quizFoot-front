@@ -34,7 +34,7 @@ export default function resetPassword() {
             console.log('responseData.data', responseData.data);
             Router.push('/login');
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     };
     const handleChange = (e) => {
@@ -68,7 +68,6 @@ export default function resetPassword() {
                         />
                     </div>
 
-                    
                     <div className={styles.containerForm__case}>
                         <label htmlFor="passwordConfirmation">
                             Confirmation du mot de passe : 

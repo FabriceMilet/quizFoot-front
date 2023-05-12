@@ -79,3 +79,14 @@
     }
     
   }
+
+  /* Pour les écrans jusqu'à 767px de largeur */
+@media only screen and (max-width: 767px) {
+    .container {
+        & h1{
+            font-size: 1.2rem;
+        }
+        & ul {
+            padding: 0;
+        }
+    }}

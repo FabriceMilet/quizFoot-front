@@ -7,7 +7,7 @@ import { FaArrowAltCircleDown } from "react-icons/fa";
 
 export async function getServerSideProps() {
   try {
-    const res = await axios(`http://localhost:1337/api/quizzes-with-all-info`);
+    const res = await axios(`${process.env.NEXT_PUBLIC_STRAPI_URL}/quizzes-with-all-info`);
     const data = res.data;
     return {
       props: { quizzes: data },
@@ -85,11 +85,11 @@ export default function Home({ quizzes }) {
             <div className={styles.containerCard__bottom}>
               <div className={styles.containerCard__choice}>
                 Tu peux choisir ton match
-                
-                  <Link href="/search/selections-nationales">
+
+                <Link href="/search/selections-nationales">
                   <button> Ici</button>
-                  </Link>
-                
+                </Link>
+
               </div>
               <span>ou</span>
               <div className={styles.containerCard__choice}>
