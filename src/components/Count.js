@@ -7,6 +7,6 @@ function Count({answersCorrect}) {
       {answersCorrect}/22
     </div>
   );
-}
+};
 
 export default Count;
