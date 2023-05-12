@@ -1,15 +1,20 @@
 @use "../styles/vars";
 
 .container {
-    background-color: vars.$lightblue;
+    background-color: vars.$blue;
     width: 100vw;
-    height: 20vh;
+    height: 9rem;
     position: fixed;
     padding: 0 3rem 0 3rem;
     top: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    font-family: 'goodtime';
+
+    &Menu {
+        height: 100vh;
+    }
 
     &Logo {
         width: 7rem;
@@ -19,11 +24,16 @@
         }
     }
 
+    &Burger {
+        display: none;
+    }
+
     &Title {
         text-transform: uppercase;
         font-size: 3.2rem;
-        color: vars.$white;
-        text-shadow: 5px 1px 2px vars.$green;
+        color: vars.$white-darker;
+        text-shadow: 2px 1px 2px vars.$green;
+        text-align: center;
     }
 
     &Navigation {
@@ -33,11 +43,11 @@
         width: 10rem;
         padding-bottom: 0.8rem;
 
+
         &__logos {
             display: flex;
             align-items: center;
             gap: 2rem;
-            // justify-content: space-around;
         }
 
         &__link {
@@ -51,29 +61,79 @@
                 left: 0;
                 display: block;
                 border-radius: 28px;
-                background: rgba(vars.$green, .6);
+                background: rgba(vars.$green, .3);
                 width: 26px;
                 height: 26px;
                 transition: all .3s ease;
             }
+
             &:hover::before {
                 width: 85%;
                 height: 100%;
-                background: rgba(vars.$green, 1);
-              }
+                background: rgba(vars.$green, .5);
+            }
         }
 
         & button {
             border: none;
             background-color: transparent;
-            color: vars.$white;
+            color: vars.$white-darker;
             padding-top: 0.4rem;
-            font-size: 1.1rem;
+            font-size: 0.9rem;
             position: relative;
-           
+
             &:hover {
                 cursor: pointer;
             }
         }
     }
+    &NavigationMobile {
+     padding: 3rem;
+
+        &__logos {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+           
+        }
+
+        & button {
+            border: none;
+            background-color: transparent;
+            color: vars.$white-darker;
+            padding-top: 2rem;
+            font-size: 2rem;
+            text-align: left;
+        }
+    }
+
+}
+
+/* Pour les écrans jusqu'à 767px de largeur */
+@media only screen and (max-width: 767px) {
+    .container {
+        padding: 0 1.5rem 0 1.5rem;
+        position:absolute;
+
+        &Burger {
+            display: block;
+            background-color: transparent;
+            color: vars.$white;
+            border: none;
+            font-size: 4rem;
+        }
+
+        &Navigation {
+            display: none;
+        }
+
+        &Logo {
+            display: none;
+        }
+
+        &Title {
+            font-size: 2rem;
+        }
+    }
+
 }

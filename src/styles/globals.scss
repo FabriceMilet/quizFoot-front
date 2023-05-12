@@ -4,8 +4,21 @@
     font-family: 'goodtime';
     src: url('../../public/fonts/good_timing.woff2')
 }
+@font-face {
+    font-family: 'noto';
+    src: url('../../public/fonts/NotoSerifJP-Regular.woff')
+}
+@font-face {
+    font-family: 'nunito';
+    src: url('../../public/fonts/Nunito-Italic-VariableFont_wght.woff2');
+    src: url('../../public/fonts/Nunito-VariableFont_wght.woff2')
+}
 
 body {
-    background-color: vars.$white; 
-    font-family: 'goodtime';
+    background: linear-gradient(
+    90deg,
+    vars.$blue,
+    vars.$lightblue
+  );
+    font-family: 'nunito';
 }
