@@ -3,11 +3,12 @@ import styles from '../../styles/Quiz.module.scss'
 import axios from 'axios';
 import Timer from '../../components/Timer'
 import Count from '../../components/Count'
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import ResultAnnouncement from '@/components/ResultAnnouncement';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import Fireworks from 'fireworks-js';
+import { FaCheck } from "react-icons/fa";
 
 
 export async function getServerSideProps({ params }) {
@@ -57,7 +58,7 @@ export default function Quiz({ quiz }) {
     const levenshteinDistance = computeLevenshteinDistance(userAnswer, correctAnswer);
 
     // on détermine si la réponse de l'utilisateur est correcte (distance inférieure à une certaine valeur)
-    const maxDistance = 2; // la distance maximale pour accepter la réponse
+    const maxDistance = 1; // la distance maximale pour accepter la réponse
     return levenshteinDistance <= maxDistance;
   }
 
@@ -84,7 +85,6 @@ export default function Quiz({ quiz }) {
     return d[m][n];
   }
 
-
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -96,6 +96,56 @@ export default function Quiz({ quiz }) {
 
     for (let i = 0; i < answer1.length; i++) {
       const correctAnswer = answer1[i].toLowerCase();
+      if (correctAnswer === form1Answer.toLowerCase()){
+        answer1Correct = true;
+
+        const index1 = answer1.indexOf(correctAnswer);
+
+        let newAnswer = answer1.filter((item, index) => index !== index1);
+
+        let correctPlayer;
+
+        for (let i = 0; i < quiz.players.length; i++) {
+          if (quiz.players[i].name.toLowerCase() === correctAnswer) {
+            correctPlayer = quiz.players[i];
+            break;
+          }
+        }
+
+        let h3s = document.querySelectorAll('h3');
+        let positionElem;
+        for (let i = 0; i < h3s.length; i++) {
+          if (h3s[i].textContent === correctPlayer.position) {
+            positionElem = h3s[i];
+            break;
+          }
+        }
+        let playerElement = document.createElement('p');
+        playerElement.textContent = correctPlayer.name;
+        positionElem.parentNode.insertBefore(playerElement, positionElem.nextSibling);
+
+        const input = event.target.elements['name1'];
+
+        input.style.backgroundColor = 'green';
+        input.style.transform = 'scale(1.05)';
+
+        setTimeout(() => {
+          input.style.backgroundColor = '';
+          input.style.transform = '';
+          setForm1Data({ name1: '' });
+          event.target.reset();
+        }, 200);
+
+        setAnswersCorrect(answersCorrect + 1);
+        setAnswer1(newAnswer);
+        break
+      }
+    }
+      
+    if (!answer1Correct) {
+    for (let i = 0; i < answer1.length; i++) {
+      const correctAnswer = answer1[i].toLowerCase();
+      
       if (checkAnswer(form1Answer.toLowerCase(), correctAnswer)) {
         answer1Correct = true;
 
@@ -151,14 +201,15 @@ export default function Quiz({ quiz }) {
             setForm1Data({ name1: '' });
             event.target.reset();
           }, 200);
-        }
-      }
-    }
+        }}
+      }}
+    
 
-    for (let i = 0; i < answer2.length; i++) {
-      const correctAnswer = answer2[i].toLowerCase();
-      if (checkAnswer(form2Answer.toLowerCase(), correctAnswer)) {
-        answer2Correct = true;
+// on fait de même avec form2
+for (let i = 0; i < answer2.length; i++) {
+  const correctAnswer = answer2[i].toLowerCase();
+  if (correctAnswer === form2Answer.toLowerCase()){      
+       answer2Correct = true;
         const index2 = answer2.indexOf(correctAnswer);
 
         let newAnswer = answer2.filter((item, index) => index !== index2);
@@ -196,24 +247,70 @@ export default function Quiz({ quiz }) {
 
         setAnswersCorrect(answersCorrect + 1);
         setAnswer2(newAnswer);
+        console.log('answer2', answer2);
         break
+      }
+}
 
-      } else if (answer2Correct === false) {
-        if (event.target.elements['name2']) {
+if (!answer2Correct) {
+  for (let i = 0; i < answer2.length; i++) {
+    const correctAnswer = answer2[i].toLowerCase();
+    
+    if (checkAnswer(form2Answer.toLowerCase(), correctAnswer)) {
+      answer2Correct = true;
+          const index2 = answer2.indexOf(correctAnswer);
+  
+          let newAnswer = answer2.filter((item, index) => index !== index2);
+  
+          let correctPlayer;
+          for (let i = 0; i < quiz.players.length; i++) {
+            if (quiz.players[i].name.toLowerCase() === correctAnswer) {
+              correctPlayer = quiz.players[i];
+              break;
+            }
+          }
+  
+          let h4s = document.querySelectorAll('h4');
+          let positionElem;
+          for (let i = 0; i < h4s.length; i++) {
+            if (h4s[i].textContent === correctPlayer.position) {
+              positionElem = h4s[i];
+              break;
+            }
+          }
+          let playerElement = document.createElement('p');
+          playerElement.textContent = correctPlayer.name;
+          positionElem.parentNode.insertBefore(playerElement, positionElem.nextSibling);
+  
           const input = event.target.elements['name2'];
-          input.style.backgroundColor = 'red';
-          input.style.transform = 'scale(0.9)';
+          input.style.backgroundColor = 'green';
+          input.style.transform = 'scale(1.05)';
+  
           setTimeout(() => {
             input.style.backgroundColor = '';
             input.style.transform = '';
             setForm2Data({ name2: '' });
             event.target.reset();
           }, 200);
+  
+          setAnswersCorrect(answersCorrect + 1);
+          setAnswer2(newAnswer);
+          break
+  
+        } else if (answer2Correct === false) {
+          if (event.target.elements['name2']) {
+            const input = event.target.elements['name2'];
+            input.style.backgroundColor = 'red';
+            input.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+              input.style.backgroundColor = '';
+              input.style.transform = '';
+              setForm2Data({ name2: '' });
+              event.target.reset();
+            }, 200);
+          }
         }
-      }
-    }
-  }
-
+  }}}
 
   const handleForm1Change = (event) => {
     setForm1Data({ name1: event.target.value });
@@ -279,7 +376,56 @@ export default function Quiz({ quiz }) {
   };
 
   const handleTimerEnd = () => {
-    setGiveUp(true)
+    setGiveUp(true);
+    // ici, on va récupérer les players non trouvés et les ajouter en rouge au rendu
+    answer1.forEach((player) => {
+      for (let i = 0; i < quiz.players.length; i++) {
+        if (quiz.players[i].name.toLowerCase() == player.toLowerCase()) {
+          // on ajoute le joueur dans le rendu
+          const correctPlayer = quiz.players[i];
+
+          let h3s = document.querySelectorAll("h3");
+          let positionElem;
+          for (let j = 0; j < h3s.length; j++) {
+            if (h3s[j].textContent === correctPlayer.position) {
+              positionElem = h3s[j];
+              break;
+            }
+          }
+          let playerElement = document.createElement("p");
+          playerElement.textContent = correctPlayer.name;
+          playerElement.style.color = "rgb(218, 90, 20)";
+          positionElem.parentNode.insertBefore(
+            playerElement,
+            positionElem.nextSibling
+          );
+        }
+      }
+    });
+    answer2.forEach((player) => {
+      for (let i = 0; i < quiz.players.length; i++) {
+        if (quiz.players[i].name.toLowerCase() == player.toLowerCase()) {
+          // on ajoute le joueur dans le rendu
+          const correctPlayer = quiz.players[i];
+
+          let h4s = document.querySelectorAll("h4");
+          let positionElem;
+          for (let j = 0; j < h4s.length; j++) {
+            if (h4s[j].textContent === correctPlayer.position) {
+              positionElem = h4s[j];
+              break;
+            }
+          }
+          let playerElement = document.createElement("p");
+          playerElement.textContent = correctPlayer.name;
+          playerElement.style.color = "rgb(218, 90, 20)";
+          positionElem.parentNode.insertBefore(
+            playerElement,
+            positionElem.nextSibling
+          );
+        }
+      }
+    });
     addResult()
     addQuiz()
   }
@@ -373,11 +519,17 @@ export default function Quiz({ quiz }) {
             <div className={styles.containerPlayground__forms}>
               <form className={styles.containerPlayground__form} onSubmit={handleSubmit}>
                 <label htmlFor="name1" autoComplete="off">{quiz.teams[0].name}</label>
+                <div className={styles.containerPlayground__input}>
                 <input type="text" id="name1" name="name1" value={form1Data.name} onChange={handleForm1Change} />
+                <button type='submit'><FaCheck size={40}/> </button>
+                </div>
               </form>
               <form className={styles.containerPlayground__form} onSubmit={handleSubmit}>
                 <label htmlFor="name2" autoComplete="off">{quiz.teams[1].name}</label>
+                <div className={styles.containerPlayground__input}>
                 <input type="text" id="name2" name="name2" value={form2Data.name} onChange={handleForm2Change} />
+                <button type='submit'><FaCheck size={40}/> </button>
+                </div>
               </form>
             </div>
             <div className={styles.containerPlayground__bottom}>
@@ -422,3 +574,6 @@ export default function Quiz({ quiz }) {
     </div>
   )
 }
+
+
+
